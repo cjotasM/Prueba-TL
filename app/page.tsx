@@ -1,4 +1,4 @@
-import KonectaOperationsLanding from '../src/components/KonectaOperationsLanding';
+import KonectaOperationsLanding from './components/KonectaOperationsLanding';
 
 export default function Page() {
   return (

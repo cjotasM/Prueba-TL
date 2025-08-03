@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { ChevronDown, Users, Target, TrendingUp, Calendar, Clock, MapPin, Phone, Mail, ArrowRight, AlertTriangle, CheckCircle, BarChart3, LucideProps } from 'lucide-react'
 import Image from 'next/image'
-import MangoBlanco from '../../src/img/MangoBlanco.png'
+import MangoBlanco from '../../img/MangoBlanco.png'
 
 interface OperationalStat {
   icon: React.ForwardRefExoticComponent<Omit<LucideProps, "ref"> & React.RefAttributes<SVGSVGElement>>

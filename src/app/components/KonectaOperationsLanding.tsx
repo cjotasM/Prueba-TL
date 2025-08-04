@@ -450,7 +450,7 @@ RECURSOS FINANCIEROS:
 
 REUNIÓN PROGRAMADA: 
 📅 Fecha: 5 de Agosto, 2025
-🕐 Hora: 2:00 PM - 6:00 PM
+🕐 Hora: 10:00 AM - 11:00 AM
 📍 Ubicación: Centro de Operaciones - Sala Ejecutiva
 
 AGENDA CRÍTICA:

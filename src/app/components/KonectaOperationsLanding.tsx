@@ -967,7 +967,7 @@ Generado: ${currentDate}
             <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
               <div className="flex items-center space-x-3 text-white">
                 <Phone className="w-6 h-6" />
-                <span className="text-lg">+57 3229022922 (Emergency)</span>
+                <span className="text-lg">+57 322 902 2922 (Emergency)</span>
               </div>
               <div className="flex items-center space-x-3 text-white">
                 <Mail className="w-6 h-6" />

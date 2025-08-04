@@ -5,6 +5,7 @@ import { motion, useScroll, useTransform } from 'framer-motion'
 import { ChevronDown, Users, Target, TrendingUp, Calendar, Clock, MapPin, Phone, Mail, ArrowRight, AlertTriangle, CheckCircle, BarChart3, LucideProps } from 'lucide-react'
 import Image from 'next/image'
 import MangoBlanco from '../../img/MangoBlanco.png'
+import LogoKonectaBlanco from '../../img/Konecta_Logo_RGB_White.png'
 
 interface OperationalStat {
   icon: React.ForwardRefExoticComponent<Omit<LucideProps, "ref"> & React.RefAttributes<SVGSVGElement>>
@@ -126,7 +127,7 @@ const KonectaOperationsLanding = () => {
     {
       title: "Service Level Recovery",
       urgency: "CRITICAL - 80/20 Target: 74%",
-      description: "SLperformance below target due to forecast discrepancies. 10% variance between projected vs actual call volume impacting resource allocation.",
+      description: "SL performance below target due to forecast discrepancies. 10% variance between projected vs actual call volume impacting resource allocation.",
       actions: ["Workforce forecast adjustment", "Real-time monitoring implementation", "Agent coaching intensification"],
       color: "from-orange-500 to-red-500",
       icon: TrendingUp,
@@ -138,7 +139,7 @@ const KonectaOperationsLanding = () => {
           {
             phase: "Immediate (Days 28-31)",
             tasks: [
-              "Emergency workforce planning session with WF team",
+              "Emergency planning session with WF team",
               "Recalibrate forecasting models using recent data patterns",
               "Implement real-time service level monitoring dashboards",
               "Initiate micro-coaching sessions for efficiency improvement"
@@ -311,7 +312,7 @@ const getStatusColor = (status: string): string => {
 ╚══════════════════════════════════════════════════════════════════════════════╝
 
 Fecha de Generación: ${currentDate}
-Responsable: Líder de Equipo Experto
+Responsable: Marlon Martinez
 Estado: CRÍTICO - Requiere Atención Inmediata
 
 ═══════════════════════════════════════════════════════════════════════════════
@@ -469,16 +470,12 @@ DECISIONES REQUERIDAS:
   CONTACTO Y ESCALAMIENTO
 ═══════════════════════════════════════════════════════════════════════════════
 
-Líder de Operaciones: Ext. 2024 (Emergencias)
-Email: operations.lead@konecta.com
-
-Para situaciones críticas fuera de horario:
-• WhatsApp Operaciones: +57 300 XXX XXXX
-• Email 24/7: crisis.ops@konecta.com
+Líder de Operaciones: +57 322 902 2922 (Emergencias)
+Email: mango_md_staff@konecta.com
 
 ═══════════════════════════════════════════════════════════════════════════════
 
-CONFIDENCIAL - KONECTA OPERATIONS EXCELLENCE
+CONFIDENCIAL - KONECTA
 Documento generado por sistema ejecutivo de reporting
 © 2025 Konecta. Todos los derechos reservados.
 
@@ -502,7 +499,7 @@ Documento generado por sistema ejecutivo de reporting
 
 Fecha: ${currentDate}
 Urgencia: ${plan.urgency}
-Responsable: Líder de Equipo Experto
+Responsable: Marlon Martinez
 
 ═══════════════════════════════════════════════════════════════════════════════
   RESUMEN EJECUTIVO
@@ -566,16 +563,15 @@ SUPERVISIÓN: Dirección de Operaciones
 REPORTE DE AVANCE: Diario para acciones críticas
 
 ESCALAMIENTO:
-• Nivel 1: operations.lead@konecta.com
-• Nivel 2: Ext. 2024 (Emergencias)
+• Nivel 1: mango_md_staff@konecta.com
+• Nivel 2: +57 322 902 2922 (Emergencias)
 • Nivel 3: Dirección General
 
 ═══════════════════════════════════════════════════════════════════════════════
 
 CONFIDENCIAL - PLAN DE ACCIÓN ESTRATÉGICO
 Generado: ${currentDate}
-© 2025 Konecta Operations Excellence
-
+© 2025 Konecta
 ═══════════════════════════════════════════════════════════════════════════════
 `
   }
@@ -922,7 +918,7 @@ Generado: ${currentDate}
               <Calendar className="w-12 h-12 mb-4" />
               <h3 className="text-2xl font-bold mb-4">Meeting Schedule</h3>
               <p className="text-lg mb-2">August 5, 2025</p>
-              <p className="text-lg mb-2">2:00 PM - 6:00 PM</p>
+              <p className="text-lg mb-2">10:00 AM - 11:00 AM</p>
               <p className="text-purple-200">Emergency operations review</p>
             </motion.div>
 
@@ -934,7 +930,7 @@ Generado: ${currentDate}
             >
               <MapPin className="w-12 h-12 mb-4" />
               <h3 className="text-2xl font-bold mb-4">Location</h3>
-              <p className="text-lg mb-2">Operations Center</p>
+              <p className="text-lg mb-2">Puerto Seco</p>
               <p className="text-lg mb-2">Executive Conference Room</p>
               <p className="text-green-200">Team leaders attendance required</p>
             </motion.div>
@@ -971,11 +967,11 @@ Generado: ${currentDate}
             <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
               <div className="flex items-center space-x-3 text-white">
                 <Phone className="w-6 h-6" />
-                <span className="text-lg">Ext. 2024 (Emergency)</span>
+                <span className="text-lg">+57 3229022922 (Emergency)</span>
               </div>
               <div className="flex items-center space-x-3 text-white">
                 <Mail className="w-6 h-6" />
-                <span className="text-lg">operations.lead@konecta.com</span>
+                <span className="text-lg">mango_md_staff@konecta.com</span>
               </div>
             </div>
 
@@ -995,14 +991,19 @@ Generado: ${currentDate}
       <footer className="bg-gray-900 text-white py-12">
         <div className="max-w-7xl mx-auto px-4 text-center">
           <div className="mb-8">
-            <h3 className="text-2xl font-bold mb-4" style={{ color: 'var(--konecta-yellow)' }}>KONECTA</h3>
+            <Image 
+              src={LogoKonectaBlanco} 
+              alt="Corporate footer" 
+              className="w-full h-full mx-auto px-115"
+            />
+            
             <p className="text-gray-400 max-w-2xl mx-auto">
               Expert Team Leadership • Operational Excellence • Strategic Recovery Solutions
             </p>
           </div>
           <div className="border-t border-gray-800 pt-8">
             <p className="text-gray-400">
-              © 2025 Konecta Operations Excellence. Confidential Leadership Review Materials.
+              © 2025 Konecta. Confidential Leadership Review Materials.
             </p>
           </div>
         </div>

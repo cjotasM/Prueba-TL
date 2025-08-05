@@ -134,7 +134,7 @@ const KonectaOperationsLanding = () => {
       fullPlan: {
         situation: "Service Level target of 80/20 currently at 74%. Workforce forecasting shows 10% variance between projected and actual call volumes, creating resource misallocation.",
         impact: "Customer satisfaction decline, increased abandonment rates, operational efficiency reduction, potential SL A breaches with clients.",
-        rootCause: "Inaccurate demand forecasting methodology, inadequate real-time adjustment protocols, suboptimal workforce scheduling algorithms.",
+        rootCause: "Inaccurate demand forecasting methodology, inadequate real-time adjustment protocols to reduce AHT, suboptimal workforce scheduling algorithms.",
         detailedActions: [
           {
             phase: "Immediate (Days 28-31)",

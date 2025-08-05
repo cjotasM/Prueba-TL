@@ -141,7 +141,7 @@ const KonectaOperationsLanding = () => {
             tasks: [
               "Emergency planning session with WF team",
               "Recalibrate forecasting models using recent data patterns",
-              "Implement real-time service level monitoring dashboards",
+              "Implement real-time service level monitoring dashboards to reduce AHT",
               "Initiate micro-coaching sessions for efficiency improvement"
             ]
           },

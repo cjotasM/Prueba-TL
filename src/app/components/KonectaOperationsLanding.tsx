@@ -71,7 +71,7 @@ const KonectaOperationsLanding = () => {
   }, [])
 
   const operationalStats: OperationalStat[] = [
-    { icon: Target, number: "90%", label: "Service Level Target", status: "target" },
+    { icon: Target, number: "80%", label: "Service Level Target", status: "target" },
     { icon: TrendingUp, number: "74%", label: "Current SL Achievement", status: "critical" },
     { icon: Users, number: "5%", label: "Absenteeism Increase", status: "warning" },
     { icon: AlertTriangle, number: "24.75%", label: "Weekend Abandonment Rate", status: "critical" }
@@ -319,7 +319,7 @@ Estado: CRÍTICO - Requiere Atención Inmediata
   RESUMEN EJECUTIVO DE INDICADORES CRÍTICOS
 ═══════════════════════════════════════════════════════════════════════════════
 
-🎯 NIVEL DE SERVICIO OBJETIVO: 90% (80/20)
+🎯 NIVEL DE SERVICIO OBJETIVO: 80% (80/20)
 📊 RENDIMIENTO ACTUAL: 74% - CRÍTICO ⚠️
 📈 BRECHA DE DESEMPEÑO: -16% vs. objetivo
 
@@ -362,7 +362,7 @@ ANÁLISIS CRÍTICO:
    Timeline: Implementación inmediata, IVR listo para Abril 2
 
 2. 📊 RECUPERACIÓN NIVEL DE SERVICIO - CRÍTICO
-   Situación:SL al 74% vs. objetivo 80/20 (90%)
+   Situación:SL al 74% vs. objetivo 80/20 (80%)
    Causa raíz: 10% varianza en pronóstico de llamadas vs. realidad
    Acciones: Reajuste workforce + monitoreo tiempo real + coaching
    Timeline: Estabilización fin de mes, optimización 30 días
@@ -411,7 +411,7 @@ OBJETIVOS INMEDIATOS (7 días):
 • Campaña IVR: 100% entrega sin pérdida alcance
 
 OBJETIVOS MEDIANO PLAZO (30 días):
-• Nivel de Servicio: >90% (objetivo 80/20)
+• Nivel de Servicio: >90%
 • Abandono general: <2%
 • Ausentismo: Reducción a niveles normales (<3%)
 • Multas: Cero errores críticos

@@ -1,11 +1,11 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { 
-  ChevronDown, Users, Target, TrendingUp, Calendar, Clock, 
-  MapPin, Phone, Mail, ArrowRight, AlertTriangle, CheckCircle, 
-  BarChart3, LucideProps, Award, Zap, BrainCircuit, HeartHandshake, UserX 
+  ChevronDown, Users, Target, TrendingUp, Clock, 
+  ArrowRight, AlertTriangle, CheckCircle, 
+  Award, Zap, BrainCircuit, HeartHandshake, UserX 
 } from 'lucide-react'
 import Image from 'next/image'
 // Asegúrate de que las rutas sean correctas según tu estructura
@@ -54,29 +54,12 @@ interface ActionPlan {
 
 // --- DATA & CONFIG ---
 const KonectaOperationsLanding = () => {
-  const [isVisible, setIsVisible] = useState<{[key: string]: boolean}>({})
   const [selectedPlan, setSelectedPlan] = useState<ActionPlan | null>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const { scrollY } = useScroll()
   const y1 = useTransform(scrollY, [0, 300], [0, -50])
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          setIsVisible(prev => ({
-            ...prev,
-            [entry.target.id]: entry.isIntersecting
-          }))
-        })
-      },
-      { threshold: 0.1 }
-    )
-    document.querySelectorAll('[id]').forEach((el) => observer.observe(el))
-    return () => observer.disconnect()
-  }, [])
-
-  // DATOS REALES DE DICIEMBRE (Extraídos del chat)
+  // DATOS REALES DE DICIEMBRE
   const operationalStats: OperationalStat[] = [
     { icon: HeartHandshake, number: "77.9%", label: "CSAT Diciembre", subLabel: "Meta: 75%", status: "excellent" },
     { icon: Zap, number: "7.39", label: "Productividad", subLabel: "Meta: 7.50", status: "warning" },
@@ -84,7 +67,7 @@ const KonectaOperationsLanding = () => {
     { icon: UserX, number: "1", label: "Bajas (Juliana)", subLabel: "Saneamiento Operativo", status: "target" }
   ]
 
-  // AGENTES ORGANIZADOS POR CUARTILES (Datos de las imágenes)
+  // AGENTES ORGANIZADOS POR CUARTILES
   const agents: AgentProfile[] = [
     // Q1 - The Stars
     { name: "Claudia Ardila", role: "The MVP", csat: "84%", prod: "9.79", quartile: "Q1", status: "active", badge: "👑" },
@@ -193,7 +176,6 @@ const KonectaOperationsLanding = () => {
   }
 
   const downloadReport = () => {
-    // TEXTO GENERADO SEGÚN TU SOLICITUD DEL CHAT
     const reportText = `
 🍋 MBR: TEAM LIMONADA DE MANGO 🥭
 Edición: Sobrevivientes de Diciembre | TL: Marlon Martinez
@@ -249,7 +231,6 @@ La receta: Capacitación, Látigo con cariño (metas diarias) y sacar las manzan
       {/* --- HERO SECTION --- */}
       <section className="relative h-[80vh] flex items-center justify-center overflow-hidden konecta-gradient">
         <div className="absolute inset-0 opacity-10">
-           {/* Pattern or texture could go here */}
            <Image src={MangoBlanco} alt="Logo Background" layout="fill" objectFit="contain" className="opacity-20 transform scale-150" />
         </div>
         
@@ -269,7 +250,7 @@ La receta: Capacitación, Látigo con cariño (metas diarias) y sacar las manzan
             </span>
           </h1>
           <p className="text-xl md:text-2xl text-blue-100 max-w-2xl mx-auto font-light">
-            Edición: "Sobrevivientes de Diciembre"
+            Edición: &quot;Sobrevivientes de Diciembre&quot;
           </p>
           <div className="mt-8 flex gap-4 justify-center">
              <button onClick={() => document.getElementById('stats')?.scrollIntoView({behavior:'smooth'})} className="bg-white text-blue-900 px-8 py-3 rounded-full font-bold hover:bg-yellow-300 transition-colors shadow-lg flex items-center gap-2">
@@ -334,7 +315,7 @@ La receta: Capacitación, Látigo con cariño (metas diarias) y sacar las manzan
                 <div className="absolute top-0 right-0 p-4 opacity-10"><Users size={100} /></div>
                 <h3 className="text-2xl font-bold text-blue-900 mb-2">La Misa Grupal</h3>
                 <div className="text-4xl font-black text-blue-600 mb-4">6.5h</div>
-                <p className="text-blue-800 font-medium">Workshop "Calidad Percibida" (18/Dic)</p>
+                <p className="text-blue-800 font-medium">Workshop &quot;Calidad Percibida&quot; (18/Dic)</p>
                 <p className="text-sm text-blue-600 mt-2">13 Agentes alineados antes de Navidad.</p>
             </div>
             {/* Card 2 */}

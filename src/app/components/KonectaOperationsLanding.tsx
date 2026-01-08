@@ -2,23 +2,33 @@
 
 import React, { useState, useEffect } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
-import { ChevronDown, Users, Target, TrendingUp, Calendar, Clock, MapPin, Phone, Mail, ArrowRight, AlertTriangle, CheckCircle, BarChart3, LucideProps } from 'lucide-react'
+import { 
+  ChevronDown, Users, Target, TrendingUp, Calendar, Clock, 
+  MapPin, Phone, Mail, ArrowRight, AlertTriangle, CheckCircle, 
+  BarChart3, LucideProps, Award, Zap, BrainCircuit, HeartHandshake, UserX 
+} from 'lucide-react'
 import Image from 'next/image'
+// Asegúrate de que las rutas sean correctas según tu estructura
 import MangoBlanco from '../../img/MangoBlanco.png'
 import LogoKonectaBlanco from '../../img/Konecta_Logo_RGB_White.png'
 
+// --- INTERFACES ---
 interface OperationalStat {
-  icon: React.ForwardRefExoticComponent<Omit<LucideProps, "ref"> & React.RefAttributes<SVGSVGElement>>
+  icon: React.ElementType
   number: string
   label: string
-  status: 'target' | 'critical' | 'warning'
+  subLabel?: string
+  status: 'target' | 'critical' | 'warning' | 'excellent'
 }
 
-interface WeeklyMetric {
-  day: string
-  serviceLevel: string
-  abandonment: string
-  status: 'good' | 'critical' | 'excellent'
+interface AgentProfile {
+  name: string
+  role: string
+  csat: string
+  prod: string
+  quartile: 'Q1' | 'Q2' | 'Q3' | 'Q4'
+  status: 'active' | 'risk' | 'terminated'
+  badge?: string
 }
 
 interface ActionPlan {
@@ -27,7 +37,7 @@ interface ActionPlan {
   description: string
   actions: string[]
   color: string
-  icon: React.ForwardRefExoticComponent<Omit<LucideProps, "ref"> & React.RefAttributes<SVGSVGElement>>
+  icon: React.ElementType
   fullPlan: {
     situation: string
     impact: string
@@ -42,13 +52,13 @@ interface ActionPlan {
   }
 }
 
+// --- DATA & CONFIG ---
 const KonectaOperationsLanding = () => {
   const [isVisible, setIsVisible] = useState<{[key: string]: boolean}>({})
   const [selectedPlan, setSelectedPlan] = useState<ActionPlan | null>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const { scrollY } = useScroll()
   const y1 = useTransform(scrollY, [0, 300], [0, -50])
-  const y2 = useTransform(scrollY, [0, 300], [0, -25])
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -62,1048 +72,449 @@ const KonectaOperationsLanding = () => {
       },
       { threshold: 0.1 }
     )
-
-    document.querySelectorAll('[id]').forEach((el) => {
-      observer.observe(el)
-    })
-
+    document.querySelectorAll('[id]').forEach((el) => observer.observe(el))
     return () => observer.disconnect()
   }, [])
 
+  // DATOS REALES DE DICIEMBRE (Extraídos del chat)
   const operationalStats: OperationalStat[] = [
-    { icon: Target, number: "80%", label: "Service Level Target", status: "target" },
-    { icon: TrendingUp, number: "74%", label: "Current SL Achievement", status: "critical" },
-    { icon: Users, number: "5%", label: "Absenteeism Increase", status: "warning" },
-    { icon: AlertTriangle, number: "24.75%", label: "Weekend Abandonment Rate", status: "critical" }
+    { icon: HeartHandshake, number: "77.9%", label: "CSAT Diciembre", subLabel: "Meta: 75%", status: "excellent" },
+    { icon: Zap, number: "7.39", label: "Productividad", subLabel: "Meta: 7.50", status: "warning" },
+    { icon: Clock, number: "94.9%", label: "Adherencia", subLabel: "Meta: 95%", status: "excellent" },
+    { icon: UserX, number: "1", label: "Bajas (Juliana)", subLabel: "Saneamiento Operativo", status: "target" }
   ]
 
-  const weeklyMetrics: WeeklyMetric[] = [
-    { day: "Monday", serviceLevel: "89.49%", abandonment: "3.82%", status: "good" },
-    { day: "Tuesday", serviceLevel: "47.58%", abandonment: "21.10%", status: "critical" },
-    { day: "Wednesday", serviceLevel: "96.97%", abandonment: "0.65%", status: "excellent" },
-    { day: "Thursday", serviceLevel: "94.06%", abandonment: "0.99%", status: "good" },
-    { day: "Friday", serviceLevel: "95.12%", abandonment: "0.66%", status: "good" },
-    { day: "Saturday", serviceLevel: "62.79%", abandonment: "24.75%", status: "critical" },
-    { day: "Sunday", serviceLevel: "51.14%", abandonment: "21.39%", status: "critical" }
+  // AGENTES ORGANIZADOS POR CUARTILES (Datos de las imágenes)
+  const agents: AgentProfile[] = [
+    // Q1 - The Stars
+    { name: "Claudia Ardila", role: "The MVP", csat: "84%", prod: "9.79", quartile: "Q1", status: "active", badge: "👑" },
+    { name: "Salomé Jaramillo", role: "Quality Queen", csat: "92%", prod: "6.68", quartile: "Q1", status: "active", badge: "🌟" },
+    { name: "Sara Polo", role: "Consistency", csat: "85%", prod: "6.90", quartile: "Q1", status: "active" },
+    { name: "Juan José Marin", role: "High Performer", csat: "83%", prod: "7.62", quartile: "Q1", status: "active" },
+    
+    // Q2 - The Backbone
+    { name: "Rosa Tuberquia", role: "Solid Player", csat: "83%", prod: "7.06", quartile: "Q2", status: "active" },
+    { name: "Jhony Morales", role: "Rising Star", csat: "75%", prod: "6.67", quartile: "Q2", status: "active" },
+    { name: "Kelly Londoño", role: "Solid Player", csat: "70%", prod: "7.66", quartile: "Q2", status: "active" },
+    
+    // Q3 - The Opportunity
+    { name: "Natalia Vásquez", role: "Developing", csat: "67%", prod: "6.97", quartile: "Q3", status: "active" },
+    { name: "Luisa Zapata", role: "Developing", csat: "64%", prod: "7.25", quartile: "Q3", status: "active" },
+    { name: "Alva Blanquicett", role: "Developing", csat: "58%", prod: "7.10", quartile: "Q3", status: "active" },
+
+    // Q4 - The Novel (Drama)
+    { name: "Fabiana Ríos", role: "Statistical Victim", csat: "44%", prod: "8.69", quartile: "Q4", status: "risk", badge: "📉" },
+    { name: "Valery Álvarez", role: "Needs Speed", csat: "87%", prod: "5.83", quartile: "Q4", status: "risk", badge: "🐢" },
+    { name: "Juliana Cardona", role: "Game Over", csat: "44%", prod: "8.53", quartile: "Q4", status: "terminated", badge: "👋" },
   ]
 
   const actionPlans: ActionPlan[] = [
     {
-      title: "IVR Implementation Crisis",
-      urgency: "URGENT - 2 Days Overdue",
-      description: "Corporate client campaign message implementation delayed. Alternative agent-based delivery initiated while technical team expedites IVR deployment.",
-      actions: ["Agent briefing on campaign messaging", "Escalation to design team", "Client communication protocol"],
-      color: "from-red-600 to-red-800",
-      icon: AlertTriangle,
+      title: "Operación: Cázame esa Encuesta",
+      urgency: "PRIORIDAD PARA FABIANA",
+      description: "Fabiana tiene buen trato pero mala suerte estadística (solo 16 encuestas). Necesitamos volumen para diluir a los detractores.",
+      actions: ["Script de cierre obligatorio", "Meta: 40 encuestas/mes", "Monitoreo de cierre"],
+      color: "from-blue-600 to-cyan-500",
+      icon: Target,
       fullPlan: {
-        situation: "Corporate client requires urgent IVR message implementation for confidential marketing campaign. Original deadline: March 28, Current date: March 30. Design team unavailable until April 2.",
-        impact: "Campaign launch delayed, potential revenue loss, client relationship strain, competitive disadvantage due to late market entry.",
-        rootCause: "Lack of advance planning communication due to campaign confidentiality requirements. Standard 5-day service agreement not met.",
+        situation: "Fabiana Ríos cerró con 44% CSAT. Análisis muestra que es un 'Falso Negativo' causado por bajo volumen muestral (16 encuestas vs 93 de Claudia).",
+        impact: "Afecta el promedio del equipo injustamente dado que su productividad es Top 3.",
+        rootCause: "Falta de invitación explícita a la encuesta al final de la interacción.",
         detailedActions: [
-          {
-            phase: "Immediate (Hours 1-24)",
-            tasks: [
-              "Obtain client approval for agent-delivered messaging",
-              "Brief all agents on campaign key messages and delivery timing",
-              "Implement quality monitoring for message consistency",
-              "Establish escalation protocol with design team"
-            ]
-          },
-          {
-            phase: "Short-term (Days 2-5)",
-            tasks: [
-              "Daily progress reviews with design team",
-              "Client communication updates twice daily",
-              "Monitor campaign effectiveness through agent delivery",
-              "Prepare for IVR transition on April 2"
-            ]
-          }
+          { phase: "Semana 1: Implementación", tasks: ["Diseño de frase de cierre personalizada", "Roleplay de cierre", "Configuración de alerta de volumen"] },
+          { phase: "Semana 2-4: Ejecución", tasks: ["Tracking diario de volumen", "Celebración de cada promotor", "Ajuste de script si no hay respuesta"] }
         ],
-        resources: "Design team priority allocation, Agent training resources, Client relationship management, Quality assurance team",
-        timeline: "Immediate implementation with IVR completion by April 2",
-        success_metrics: "100% message delivery rate, Client satisfaction maintained, Campaign KPIs achieved, Zero quality issues"
+        resources: "Scripting, Feedback 1:1, Tablero de Control",
+        timeline: "Enero Completo",
+        success_metrics: ">40 Encuestas procesadas, CSAT > 75%"
       }
     },
     {
-      title: "Service Level Recovery",
-      urgency: "CRITICAL - 80/20 Target: 74%",
-      description: "SL performance below target due to forecast discrepancies. 10% variance between projected vs actual call volume impacting resource allocation.",
-      actions: ["Workforce forecast adjustment", "Real-time monitoring implementation", "Agent coaching intensification"],
-      color: "from-orange-500 to-red-500",
-      icon: TrendingUp,
+      title: "Proyecto: Clonando a Claudia",
+      urgency: "NIVELACIÓN OPERATIVA",
+      description: "Valery y Jhony tienen calidad pero les falta nitro. Harán Shadowing Inverso con Claudia (la más rápida) para copiar sus trucos.",
+      actions: ["Sesiones de Shadowing", "Copia de atajos de teclado", "Drill de navegación"],
+      color: "from-purple-600 to-pink-600",
+      icon: BrainCircuit,
       fullPlan: {
-        situation: "Service Level target of 80/20 currently at 74%. Workforce forecasting shows 10% variance between projected and actual call volumes, creating resource misallocation.",
-        impact: "Customer satisfaction decline, increased abandonment rates, operational efficiency reduction, potential SL A breaches with clients.",
-        rootCause: "Inaccurate demand forecasting methodology, inadequate real-time adjustment protocols to reduce AHT, suboptimal workforce scheduling algorithms.",
+        situation: "Valery (Prod 5.83) y Jhony (6.67) están por debajo de la meta de 7.5, generando presión sobre el resto.",
+        impact: "Ineficiencia operativa y riesgo de acumulación de cola (Backlog).",
+        rootCause: "Flujos de navegación lentos y falta de uso de herramientas rápidas (atajos/macros).",
         detailedActions: [
-          {
-            phase: "Immediate (Days 28-31)",
-            tasks: [
-              "Emergency planning session with WF team",
-              "Recalibrate forecasting models using recent data patterns",
-              "Implement real-time service level monitoring dashboards to reduce AHT",
-              "Initiate micro-coaching sessions for efficiency improvement"
-            ]
-          },
-          {
-            phase: "Medium-term (Next Month)",
-            tasks: [
-              "Deploy advanced forecasting algorithms",
-              "Establish dynamic workforce allocation protocols",
-              "Implement predictive analytics for demand planning",
-              "Create automated alert systems for SL deviations"
-            ]
-          }
+          { phase: "Observación", tasks: ["Ver trabajar a Claudia Ardila 1 hora/día", "Anotar diferencias de proceso"] },
+          { phase: "Práctica", tasks: ["Implementar atajos de Claudia", "Roleplay de velocidad"] }
         ],
-        resources: "Workforce Management team, Real-time analytics platform, Coaching specialists, Forecasting software",
-        timeline: "Immediate stabilization by month-end, full optimization within 30 days",
-        success_metrics: "Achieve 80% service level, <2% abandonment rate, 95% forecast accuracy, Agent utilization >85%"
+        resources: "Claudia Ardila (Mentor), Tiempo fuera de línea",
+        timeline: "Quincena 1 Enero",
+        success_metrics: "Productividad > 7.5 eventos/hora"
       }
     },
     {
-      title: "Team Performance Revival",
-      urgency: "HIGH PRIORITY - 30-Day Recovery",
-      description: "Team motivation and performance decline. Multiple KPIs underperforming with increased absenteeism and quality issues generating company penalties.",
-      actions: ["1:1 diagnostic sessions", "Recognition program launch", "Proactive coaching implementation"],
-      color: "from-blue-600 to-purple-600",
-      icon: Users,
+      title: "Iniciativa: Viernes de Escape",
+      urgency: "MOTIVACIÓN PURA",
+      description: "El incentivo 'El 80/8'. Si logras CSAT >80% y Prod >8.0 en la semana, te vas 2 horas antes el viernes.",
+      actions: ["Tracking semanal público", "Gestión de permisos WFM", "Celebración pública"],
+      color: "from-yellow-500 to-orange-500",
+      icon: Award,
       fullPlan: {
-        situation: "Team performance deterioration over 2 months: missed targets, 5% absenteeism increase, declining customer service quality, errors causing financial penalties.",
-        impact: "Revenue loss from penalties, customer churn risk, team morale crisis, operational instability, increased recruitment costs.",
-        rootCause: "Team demotivation stemming from unclear expectations, lack of recognition, insufficient feedback, possible systemic operational issues.",
+        situation: "Necesitamos mantener el momentum de Diciembre y evitar la fatiga post-navidad.",
+        impact: "Mejora clima laboral y crea competencia sana.",
+        rootCause: "N/A - Iniciativa proactiva de retención.",
         detailedActions: [
-          {
-            phase: "Week 1: Diagnosis & Communication",
-            tasks: [
-              "Conduct individual 1:1 sessions with all team members",
-              "Deploy anonymous team satisfaction survey",
-              "Analyze performance data for patterns and trends",
-              "Hold transparent team meeting to discuss findings"
-            ]
-          },
-          {
-            phase: "Weeks 2-3: Intervention & Motivation",
-            tasks: [
-              "Launch comprehensive recognition and rewards program",
-              "Implement skill-based training for identified gaps",
-              "Establish regular feedback and coaching cycles",
-              "Address operational obstacles identified in diagnosis"
-            ]
-          },
-          {
-            phase: "Week 4+: Sustainability",
-            tasks: [
-              "Collaborative goal-setting with team input",
-              "Celebrate achieved milestones and progress",
-              "Establish ongoing communication protocols",
-              "Monitor and adjust interventions based on results"
-            ]
-          }
+          { phase: "Lanzamiento", tasks: ["Comunicar reglas claras", "Crear tablero de posiciones"] },
+          { phase: "Premiación", tasks: ["Validación de métricas Jueves PM", "Autorización de salida Viernes"] }
         ],
-        resources: "HR partnership, Training specialists, Recognition budget, Performance management tools",
-        timeline: "30-day intensive recovery program with ongoing sustainability measures",
-        success_metrics: "Return to target KPIs, <3% absenteeism, Zero penalty-causing errors, 90%+ team satisfaction"
-      }
-    },
-    {
-      title: "Weekend Operations Optimization",
-      urgency: "IMMEDIATE - Weekend Crisis",
-      description: "Critical weekend performance gaps with service levels dropping to 51-62% and abandonment rates exceeding 20%. Capacity planning overhaul required.",
-      actions: ["Weekend staffing restructure", "Flexible scheduling implementation", "Real-time management enhancement"],
-      color: "from-purple-600 to-indigo-600",
-      icon: Clock,
-      fullPlan: {
-        situation: "Weekend operations critically underperforming: Saturday SL 62.79% (abandonment 24.75%), Sunday SL 51.14% (abandonment 21.39%), far below 90% target.",
-        impact: "Severe customer experience degradation, high customer churn risk, brand reputation damage, lost revenue from abandoned interactions.",
-        rootCause: "Inadequate weekend staffing models, poor demand forecasting for weekends, insufficient real-time management coverage, agent utilization inefficiencies.",
-        detailedActions: [
-          {
-            phase: "Immediate (This Weekend)",
-            tasks: [
-              "Emergency staffing adjustment for upcoming weekend",
-              "Deploy senior supervisors for weekend coverage",
-              "Implement real-time queue management protocols",
-              "Activate overflow and escalation procedures"
-            ]
-          },
-          {
-            phase: "Short-term (Next 2 Weekends)",
-            tasks: [
-              "Redesign weekend shift patterns and coverage",
-              "Implement flexible/part-time weekend specialists",
-              "Deploy advanced queue management technology",
-              "Establish weekend-specific performance targets"
-            ]
-          },
-          {
-            phase: "Long-term (Monthly)",
-            tasks: [
-              "Develop weekend-optimized forecasting models",
-              "Create dedicated weekend management structure",
-              "Implement weekend performance analytics",
-              "Establish continuous improvement protocols"
-            ]
-          }
-        ],
-        resources: "Additional weekend staff, Management coverage, Queue management system, Forecasting tools",
-        timeline: "Immediate weekend improvements, full optimization within 30 days",
-        success_metrics: ">85% weekend service level, <5% abandonment rate, 70%+ agent utilization, Customer satisfaction >90%"
+        resources: "Horas de compensatorio, Budget de bienestar",
+        timeline: "Todo Enero",
+        success_metrics: "30% del equipo logrando la doble meta"
       }
     }
   ]
 
-const getStatusColor = (status: string): string => {
+  // --- HELPER FUNCTIONS ---
+  const getStatusColor = (status: string) => {
     switch(status) {
-      case 'excellent': return 'text-green-600 bg-green-100'
-      case 'good': return 'text-blue-600 bg-blue-100'
-      case 'warning': return 'text-yellow-600 bg-yellow-100'
-      case 'critical': return 'text-red-600 bg-red-100'
-      case 'target': return 'text-purple-600 bg-purple-100'
+      case 'excellent': return 'text-green-600 bg-green-100 border-green-200'
+      case 'warning': return 'text-yellow-600 bg-yellow-100 border-yellow-200'
+      case 'critical': return 'text-red-600 bg-red-100 border-red-200'
+      case 'target': return 'text-purple-600 bg-purple-100 border-purple-200'
       default: return 'text-gray-600 bg-gray-100'
     }
   }
 
-  // Missing function definitions
-  const scrollToElement = (elementId: string) => {
-    const element = document.getElementById(elementId)
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' })
+  const getQuartileStyle = (quartile: string) => {
+    switch(quartile) {
+      case 'Q1': return 'border-l-4 border-yellow-400 bg-gradient-to-r from-yellow-50 to-white'
+      case 'Q2': return 'border-l-4 border-blue-400 bg-white'
+      case 'Q3': return 'border-l-4 border-orange-300 bg-white'
+      case 'Q4': return 'border-l-4 border-red-400 bg-red-50'
+      default: return 'bg-white'
     }
   }
 
-  const scrollToActionPlans = () => {
-    scrollToElement('action-plans')
-  }
-
   const downloadReport = () => {
-    const reportContent = generateFullReport()
+    // TEXTO GENERADO SEGÚN TU SOLICITUD DEL CHAT
+    const reportText = `
+🍋 MBR: TEAM LIMONADA DE MANGO 🥭
+Edición: Sobrevivientes de Diciembre | TL: Marlon Martinez
+
+1. ¿CÓMO NOS FUE? (Resumen)
+Señores, ¡habemus recuperación! Superamos la meta de CSAT (+10.2%) y casi le pegamos a la Productividad.
+La receta: Capacitación, Látigo con cariño (metas diarias) y sacar las manzanas podridas.
+
+2. SCORECARD
+- CSAT: 77.9% (Meta 75%) ✅
+- Prod: 7.39 (Meta 7.5) ⚠️
+- Adherencia: 94.9% ✅
+
+3. JUSTIFICANDO MI SUELDO (ROI Coaching)
+- Clínica Grupal (18/Dic): 6.5 Horas-Hombre. Resultado: Clientes felices en Navidad.
+- 1-on-1 & Confesionario: ~5.2 Horas. Resultado: Corrección de rumbo inmediata.
+- Total Inversión: ~12 Horas de liderazgo puro.
+
+4. EL SALÓN DE LA FAMA
+- MVP: Claudia Ardila (Rápida y Furiosa: 9.79 Prod / 84% CSAT).
+- Calidad: Salomé Jaramillo (92% CSAT).
+- La Baja: Juliana Cardona (Renunció el 31/12). Adiós al Call Avoidance.
+
+5. PLAN ENERO
+- Survey Hunting para Fabiana.
+- Shadowing inverso para los lentos.
+- Cero tolerancia al corte de llamadas.
+
+© 2026 Limonada de Mango Ops.
+    `
     const element = document.createElement('a')
-    const file = new Blob([reportContent], {type: 'text/plain;charset=utf-8'})
+    const file = new Blob([reportText], {type: 'text/plain;charset=utf-8'})
     element.href = URL.createObjectURL(file)
-    element.download = `Konecta_Operations_Report_${new Date().toISOString().split('T')[0]}.txt`
+    element.download = `MBR_Limonada_Mango_Dic2025.txt`
     document.body.appendChild(element)
     element.click()
     document.body.removeChild(element)
-  }
-  
-  const downloadPlanReport = (plan: ActionPlan) => {
-    const reportContent = generatePlanReport(plan)
-    const element = document.createElement('a')
-    const file = new Blob([reportContent], {type: 'text/plain;charset=utf-8'})
-    element.href = URL.createObjectURL(file)
-    element.download = `${plan.title.replace(/\s+/g, '_')}_Action_Plan_${new Date().toISOString().split('T')[0]}.txt`
-    document.body.appendChild(element)
-    element.click()
-    document.body.removeChild(element)
-  }
-
-  const generateFullReport = () => {
-    const currentDate = new Date().toLocaleDateString('es-CO', { 
-      weekday: 'long', 
-      year: 'numeric', 
-      month: 'long', 
-      day: 'numeric' 
-    })
-    
-    return `
-╔══════════════════════════════════════════════════════════════════════════════╗
-║                    KONECTA OPERATIONS EXCELLENCE REPORT                      ║
-║                         REPORTE EJECUTIVO OPERACIONAL                       ║
-╚══════════════════════════════════════════════════════════════════════════════╝
-
-Fecha de Generación: ${currentDate}
-Responsable: Marlon Martinez
-Estado: CRÍTICO - Requiere Atención Inmediata
-
-═══════════════════════════════════════════════════════════════════════════════
-  RESUMEN EJECUTIVO DE INDICADORES CRÍTICOS
-═══════════════════════════════════════════════════════════════════════════════
-
-🎯 NIVEL DE SERVICIO OBJETIVO: 80% (80/20)
-📊 RENDIMIENTO ACTUAL: 74% - CRÍTICO ⚠️
-📈 BRECHA DE DESEMPEÑO: -16% vs. objetivo
-
-🚨 INDICADORES DE ALERTA CRÍTICA:
-• Abandono de fin de semana: 24.75% (Meta: 2%)
-• Ausentismo del equipo: +5% incremento
-• Multas por errores graves: Activas
-• Crisis IVR: 2 días de retraso
-
-═══════════════════════════════════════════════════════════════════════════════
-  MÉTRICAS OPERACIONALES SEMANALES
-═══════════════════════════════════════════════════════════════════════════════
-
-RENDIMIENTO POR DÍA:
-┌─────────────┬─────────────────┬─────────────────┬──────────────┐
-│    DÍA      │  NIVEL SERVICIO │   % ABANDONO    │    ESTADO    │
-├─────────────┼─────────────────┼─────────────────┼──────────────┤
-│ Lunes       │     89.49%      │     3.82%       │   ACEPTABLE  │
-│ Martes      │     47.58%      │    21.10%       │   CRÍTICO    │
-│ Miércoles   │     96.97%      │     0.65%       │   EXCELENTE  │
-│ Jueves      │     94.06%      │     0.99%       │   BUENO      │
-│ Viernes     │     95.12%      │     0.66%       │   BUENO      │
-│ Sábado      │     62.79%      │    24.75%       │   CRÍTICO    │
-│ Domingo     │     51.14%      │    21.39%       │   CRÍTICO    │
-└─────────────┴─────────────────┴─────────────────┴──────────────┘
-
-ANÁLISIS CRÍTICO:
-• Fines de semana presentan el mayor deterioro operacional
-• Martes muestra anomalía significativa que requiere investigación
-• 3 de 7 días en estado crítico (43% de la semana)
-
-═══════════════════════════════════════════════════════════════════════════════
-  PLANES DE ACCIÓN ESTRATÉGICOS
-═══════════════════════════════════════════════════════════════════════════════
-
-1. 🚨 CRISIS IVR - URGENTE (2 días de retraso)
-   Situación: Cliente corporativo requiere mensaje urgente para campaña
-   Impacto: Riesgo de pérdida de cliente y daño reputacional
-   Solución inmediata: Entrega por agentes mientras se acelera IVR
-   Timeline: Implementación inmediata, IVR listo para Abril 2
-
-2. 📊 RECUPERACIÓN NIVEL DE SERVICIO - CRÍTICO
-   Situación:SL al 74% vs. objetivo 80/20 (80%)
-   Causa raíz: 10% varianza en pronóstico de llamadas vs. realidad
-   Acciones: Reajuste workforce + monitoreo tiempo real + coaching
-   Timeline: Estabilización fin de mes, optimización 30 días
-
-3. 👥 REVITALIZACIÓN DE EQUIPO - ALTA PRIORIDAD
-   Situación: Desmotivación generalizada, +5% ausentismo, multas
-   Enfoque: Diagnóstico 1:1 + programa reconocimiento + coaching
-   Fases: Semana 1 diagnóstico, Semanas 2-3 intervención, Semana 4+ sostenibilidad
-   Timeline: Programa intensivo 30 días
-
-4. ⏰ OPTIMIZACIÓN FINES DE SEMANA - INMEDIATO
-   Situación: SL crítico sábados/domingos (51-62% vs. 90%)
-   Causa raíz: Pronóstico inadecuado + cobertura insuficiente
-   Solución: Reestructura turnos + gestión tiempo real + especialistas weekend
-   Timeline: Mejoras inmediatas próximo fin de semana
-
-═══════════════════════════════════════════════════════════════════════════════
-  CRONOGRAMA DE IMPLEMENTACIÓN
-═══════════════════════════════════════════════════════════════════════════════
-
-FASE 1 - ACCIONES INMEDIATAS (Días 1-7):
-□ Ajuste workforce de emergencia
-□ Protocolo agentes para campaña IVR
-□ Monitoreo intensivo tiempo real
-□ Sesiones 1:1 diagnóstico equipo
-
-FASE 2 - RECUPERACIÓN TÁCTICA (Semanas 2-3):
-□ Recalibración modelos forecasting
-□ Programa reconocimiento activo
-□ Capacitación focalizada en gaps
-□ Reestructura turnos fin de semana
-
-FASE 3 - EXCELENCIA SOSTENIBLE (Semana 4+):
-□ Metas colaborativas con equipo
-□ Analíticas predictivas avanzadas
-□ Cultura mejora continua
-□ Protocolos comunicación abierta
-
-═══════════════════════════════════════════════════════════════════════════════
-  MÉTRICAS DE ÉXITO Y SEGUIMIENTO
-═══════════════════════════════════════════════════════════════════════════════
-
-OBJETIVOS INMEDIATOS (7 días):
-• Nivel de Servicio: >80%
-• Abandono fin de semana: <10%
-• Campaña IVR: 100% entrega sin pérdida alcance
-
-OBJETIVOS MEDIANO PLAZO (30 días):
-• Nivel de Servicio: >90%
-• Abandono general: <2%
-• Ausentismo: Reducción a niveles normales (<3%)
-• Multas: Cero errores críticos
-
-OBJETIVOS LARGO PLAZO (90 días):
-• Operación estabilizada en excelencia
-• Equipo motivado y comprometido
-• Procesos optimizados y automatizados
-• Cliente corporativo satisfecho y fidelizado
-
-═══════════════════════════════════════════════════════════════════════════════
-  RECURSOS REQUERIDOS
-═══════════════════════════════════════════════════════════════════════════════
-
-RECURSOS HUMANOS:
-• Equipo Workforce Management (prioridad máxima)
-• Especialistas coaching y capacitación
-• Supervisores dedicados fin de semana
-• Equipo diseño e implementación IVR
-
-RECURSOS TECNOLÓGICOS:
-• Plataforma monitoreo tiempo real
-• Herramientas analíticas forecasting
-• Sistemas gestión rendimiento
-• Dashboard ejecutivo de seguimiento
-
-RECURSOS FINANCIEROS:
-• Presupuesto programa reconocimiento
-• Inversión capacitación especializada
-• Costos personal adicional fin de semana
-• Tecnología predictiva avanzada
-
-═══════════════════════════════════════════════════════════════════════════════
-  PRÓXIMOS PASOS Y REUNIÓN EJECUTIVA
-═══════════════════════════════════════════════════════════════════════════════
-
-REUNIÓN PROGRAMADA: 
-📅 Fecha: 5 de Agosto, 2025
-🕐 Hora: 10:00 AM - 11:00 AM
-📍 Ubicación: Centro de Operaciones - Sala Ejecutiva
-
-AGENDA CRÍTICA:
-1. Presentación análisis situacional completo
-2. Aprobación planes de acción y recursos
-3. Definición estructura seguimiento
-4. Asignación responsabilidades específicas
-5. Timeline detallado de implementación
-
-DECISIONES REQUERIDAS:
-• Autorización presupuesto excepcional
-• Aprobación reestructura turnos
-• Priorización recursos diseño IVR
-• Validación métricas y KPIs
-
-═══════════════════════════════════════════════════════════════════════════════
-  CONTACTO Y ESCALAMIENTO
-═══════════════════════════════════════════════════════════════════════════════
-
-Líder de Operaciones: +57 322 902 2922 (Emergencias)
-Email: mango_md_staff@konecta.com
-
-═══════════════════════════════════════════════════════════════════════════════
-
-CONFIDENCIAL - KONECTA
-Documento generado por sistema ejecutivo de reporting
-© 2025 Konecta. Todos los derechos reservados.
-
-═══════════════════════════════════════════════════════════════════════════════
-`
-  }
-
-  const generatePlanReport = (plan: ActionPlan) => {
-    const currentDate = new Date().toLocaleDateString('es-CO', { 
-      weekday: 'long', 
-      year: 'numeric', 
-      month: 'long', 
-      day: 'numeric' 
-    })
-    
-    return `
-╔══════════════════════════════════════════════════════════════════════════════╗
-║                    PLAN DE ACCIÓN DETALLADO - KONECTA                       ║
-║                        ${plan.title.toUpperCase()}                        
-╚══════════════════════════════════════════════════════════════════════════════╝
-
-Fecha: ${currentDate}
-Urgencia: ${plan.urgency}
-Responsable: Marlon Martinez
-
-═══════════════════════════════════════════════════════════════════════════════
-  RESUMEN EJECUTIVO
-═══════════════════════════════════════════════════════════════════════════════
-
-${plan.description}
-
-═══════════════════════════════════════════════════════════════════════════════
-  ANÁLISIS SITUACIONAL COMPLETO
-═══════════════════════════════════════════════════════════════════════════════
-
-SITUACIÓN ACTUAL:
-${plan.fullPlan.situation}
-
-IMPACTO EN EL NEGOCIO:
-${plan.fullPlan.impact}
-
-ANÁLISIS DE CAUSA RAÍZ:
-${plan.fullPlan.rootCause}
-
-═══════════════════════════════════════════════════════════════════════════════
-  PLAN DE ACCIÓN DETALLADO
-═══════════════════════════════════════════════════════════════════════════════
-
-${plan.fullPlan.detailedActions.map((phase: { phase: string; tasks: string[] }, index: number) => `
-FASE ${index + 1}: ${phase.phase.toUpperCase()}
-${'-'.repeat(60)}
-${phase.tasks.map(task => `• ${task}`).join('\n')}
-`).join('\n')}
-
-═══════════════════════════════════════════════════════════════════════════════
-  RECURSOS NECESARIOS
-═══════════════════════════════════════════════════════════════════════════════
-
-${plan.fullPlan.resources}
-
-═══════════════════════════════════════════════════════════════════════════════
-  CRONOGRAMA DE IMPLEMENTACIÓN
-═══════════════════════════════════════════════════════════════════════════════
-
-${plan.fullPlan.timeline}
-
-═══════════════════════════════════════════════════════════════════════════════
-  MÉTRICAS DE ÉXITO
-═══════════════════════════════════════════════════════════════════════════════
-
-${plan.fullPlan.success_metrics}
-
-═══════════════════════════════════════════════════════════════════════════════
-  ACCIONES CLAVE INMEDIATAS
-═══════════════════════════════════════════════════════════════════════════════
-
-${plan.actions.map((action: string) => `✓ ${action}`).join('\n')}
-
-═══════════════════════════════════════════════════════════════════════════════
-  SEGUIMIENTO Y CONTROL
-═══════════════════════════════════════════════════════════════════════════════
-
-RESPONSABLE PRINCIPAL: Marlon Martinez
-SUPERVISIÓN: Dirección de Operaciones
-REPORTE DE AVANCE: Diario para acciones críticas
-
-ESCALAMIENTO:
-• Nivel 1: mango_md_staff@konecta.com
-• Nivel 2: +57 322 902 2922 (Emergencias)
-• Nivel 3: Dirección General
-
-═══════════════════════════════════════════════════════════════════════════════
-
-CONFIDENCIAL - PLAN DE ACCIÓN ESTRATÉGICO
-Generado: ${currentDate}
-© 2025 Konecta
-═══════════════════════════════════════════════════════════════════════════════
-`
-  }
-
-  const openPlanModal = (plan: ActionPlan) => {
-    setSelectedPlan(plan)
-    setIsModalOpen(true)
-  }
-
-  const closePlanModal = () => {
-    setSelectedPlan(null)
-    setIsModalOpen(false)
   }
 
   return (
-    <div className="min-h-screen bg-white">
-      {/* Custom Styles */}
+    <div className="min-h-screen bg-gray-50 font-sans">
       <style jsx global>{`
         :root {
           --konecta-primary: #2800c8;
           --konecta-secondary: #0F0F72;
-          --konecta-light: #A6B7FF;
           --konecta-yellow: #f0fa00;
-          --konecta-red: #DB1F51;
-          --konecta-orange: #FD6221;
-          --konecta-green: #0DCA61;
-          --konecta-teal: #09BFAF;
-          --konecta-cyan: #04B4FD;
         }
-        
-        .konecta-primary { color: var(--konecta-primary); }
-        .bg-konecta-primary { background-color: var(--konecta-primary); }
         .konecta-gradient {
           background: linear-gradient(135deg, var(--konecta-primary), var(--konecta-secondary));
         }
       `}</style>
 
-      {/* Hero Section with Banner Space */}
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0 konecta-gradient opacity-90"></div>
+      {/* --- HERO SECTION --- */}
+      <section className="relative h-[80vh] flex items-center justify-center overflow-hidden konecta-gradient">
+        <div className="absolute inset-0 opacity-10">
+           {/* Pattern or texture could go here */}
+           <Image src={MangoBlanco} alt="Logo Background" layout="fill" objectFit="contain" className="opacity-20 transform scale-150" />
+        </div>
         
-        {/* Banner Image */}
-        <div className="absolute inset-0 z-0">
-          <div className="w-full h-full flex items-center justify-center">
-            <Image 
-              src={MangoBlanco} 
-              alt="Corporate Banner" 
-              className="w-full h-full object-contain opacity-25"
-            />
-          </div>
-        </div>
-
-        <motion.div 
-          style={{ y: y1 }}
-          className="relative z-10 text-center text-white px-4 max-w-6xl mx-auto"
-        >
-          <motion.h1 
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1 }}
-            className="text-6xl md:text-8xl font-bold mb-6 tracking-tight"
-          >
-            OPERATIONS
-            <span className="block text-yellow-300" style={{ color: 'var(--konecta-yellow)' }}>
-              EXCELLENCE
-            </span>
-          </motion.h1>
-          
-          <motion.p 
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.3 }}
-            className="text-xl md:text-2xl mb-8 max-w-3xl mx-auto leading-relaxed"
-          >
-            Expert Team Leadership • Strategic Action Plans • Operational Recovery Solutions
-          </motion.p>
-
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.6 }}
-            className="flex flex-col sm:flex-row gap-4 justify-center items-center"
-          >
-            <button 
-              className="bg-yellow-300 text-gray-900 px-8 py-4 rounded-full font-bold text-lg hover:bg-yellow-200 transition-all duration-300 transform hover:scale-105 shadow-lg"
-              onClick={scrollToActionPlans}
-            >
-              View Action Plans
-            </button>
-            <button 
-              className="border-2 border-white text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-white hover:text-gray-900 transition-all duration-300"
-              onClick={downloadReport}
-            >
-              Download Report
-            </button>
-          </motion.div>
-        </motion.div>
-
-        <motion.div 
-          animate={{ y: [0, 10, 0] }}
-          transition={{ duration: 2, repeat: Infinity }}
-          className="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-white cursor-pointer"
-          onClick={() => document.getElementById('stats')?.scrollIntoView({ behavior: 'smooth' })}
-        >
-          <ChevronDown size={32} />
-        </motion.div>
-      </section>
-
-      {/* Current Performance Stats */}
-      <section id="stats" className="py-20 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4">
-          <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            animate={isVisible.stats ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.8 }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-5xl font-bold konecta-primary mb-6">Current Operational Status</h2>
-            <p className="text-xl text-gray-600">Real-time performance indicators requiring immediate attention</p>
-          </motion.div>
-
+        <motion.div style={{ y: y1 }} className="relative z-10 text-center text-white px-4">
           <motion.div 
-            initial={{ opacity: 0, y: 50 }}
-            animate={isVisible.stats ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.8 }}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12"
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 0.5 }}
+            className="mb-4 inline-block px-4 py-1 rounded-full bg-yellow-400 text-blue-900 font-bold tracking-wider"
           >
-            {operationalStats.map((stat, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 30 }}
-                animate={isVisible.stats ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                className="text-center p-8 bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 group"
-              >
-                <div className={`inline-flex items-center justify-center w-16 h-16 rounded-full mb-4 group-hover:scale-110 transition-transform duration-300 ${
-                  stat.status === 'critical' ? 'bg-red-500' : 
-                  stat.status === 'warning' ? 'bg-yellow-500' : 
-                  'bg-purple-600'
-                }`}>
-                  <stat.icon className="w-8 h-8 text-white" />
-                </div>
-                <h3 className={`text-4xl font-bold mb-2 ${
-                  stat.status === 'critical' ? 'text-red-600' : 
-                  stat.status === 'warning' ? 'text-yellow-600' : 
-                  'konecta-primary'
-                }`}>{stat.number}</h3>
-                <p className="text-gray-600 font-medium">{stat.label}</p>
-                <span className={`inline-block px-3 py-1 rounded-full text-xs font-medium mt-2 ${getStatusColor(stat.status)}`}>
-                  {stat.status.toUpperCase()}
-                </span>
-              </motion.div>
-            ))}
+            MONTHLY BUSINESS REVIEW
           </motion.div>
-
-          {/* Weekly Performance Chart */}
-          <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            animate={isVisible.stats ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.8, delay: 0.4 }}
-            className="bg-white rounded-2xl p-8 shadow-lg"
-          >
-            <h3 className="text-2xl font-bold konecta-primary mb-6">Weekly Performance Analysis</h3>
-            <div className="grid grid-cols-1 md:grid-cols-7 gap-4">
-              {weeklyMetrics.map((metric, index) => (
-                <div key={index} className="text-center p-4 bg-gray-50 rounded-xl">
-                  <h4 className="font-bold text-gray-700 mb-2">{metric.day}</h4>
-                  <div className={`text-lg font-bold mb-1 ${
-                    metric.status === 'excellent' ? 'text-green-600' :
-                    metric.status === 'good' ? 'text-blue-600' :
-                    metric.status === 'critical' ? 'text-red-600' : 'text-gray-600'
-                  }`}>
-                    {metric.serviceLevel}
-                  </div>
-                  <div className="text-sm text-gray-500">SL</div>
-                  <div className={`text-sm font-medium ${
-                    parseFloat(metric.abandonment) > 10 ? 'text-red-600' : 'text-gray-600'
-                  }`}>
-                    {metric.abandonment} abandon
-                  </div>
-                </div>
-              ))}
-            </div>
-          </motion.div>
-        </div>
+          <h1 className="text-6xl md:text-8xl font-black mb-4 tracking-tight">
+            LIMONADA <br/>
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-yellow-500">
+              DE MANGO
+            </span>
+          </h1>
+          <p className="text-xl md:text-2xl text-blue-100 max-w-2xl mx-auto font-light">
+            Edición: "Sobrevivientes de Diciembre"
+          </p>
+          <div className="mt-8 flex gap-4 justify-center">
+             <button onClick={() => document.getElementById('stats')?.scrollIntoView({behavior:'smooth'})} className="bg-white text-blue-900 px-8 py-3 rounded-full font-bold hover:bg-yellow-300 transition-colors shadow-lg flex items-center gap-2">
+                Ver Resultados <ChevronDown size={20}/>
+             </button>
+             <button onClick={downloadReport} className="border-2 border-white text-white px-8 py-3 rounded-full font-bold hover:bg-white/10 transition-colors">
+                Descargar TXT
+             </button>
+          </div>
+        </motion.div>
       </section>
 
-      {/* Action Plans */}
-      <section id="action-plans" className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4">
-          <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            animate={isVisible['action-plans'] ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.8 }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-5xl font-bold konecta-primary mb-6">Strategic Action Plans</h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Comprehensive solutions addressing critical operational challenges with measurable impact targets
-            </p>
-          </motion.div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {actionPlans.map((plan, index) => (
+      {/* --- KPI STATS --- */}
+      <section id="stats" className="py-20 -mt-20 relative z-20 px-4">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {operationalStats.map((stat, idx) => (
               <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 30 }}
-                animate={isVisible['action-plans'] ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                className="group relative overflow-hidden rounded-2xl bg-white shadow-lg hover:shadow-2xl transition-all duration-300 border-l-4 border-purple-600"
+                key={idx}
+                initial={{ opacity: 0, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: idx * 0.1 }}
+                className={`bg-white p-6 rounded-2xl shadow-xl border-t-4 ${
+                    stat.status === 'excellent' ? 'border-green-500' : 
+                    stat.status === 'warning' ? 'border-yellow-500' : 
+                    stat.status === 'target' ? 'border-purple-500' : 'border-gray-200'
+                }`}
               >
-                <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-br ${plan.color} opacity-10 rounded-bl-full`}></div>
-                <div className="relative p-8">
-                  <div className="flex items-start justify-between mb-4">
-                    <div className={`inline-flex items-center justify-center w-12 h-12 bg-gradient-to-br ${plan.color} rounded-xl`}>
-                      <plan.icon className="w-6 h-6 text-white" />
-                    </div>
-                    <span className="px-3 py-1 bg-red-100 text-red-700 text-xs font-bold rounded-full">
-                      {plan.urgency}
-                    </span>
+                <div className="flex justify-between items-start mb-4">
+                  <div className={`p-3 rounded-xl ${getStatusColor(stat.status)}`}>
+                    <stat.icon size={24} />
                   </div>
-                  
-                  <h3 className="text-2xl font-bold konecta-primary mb-3">{plan.title}</h3>
-                  <p className="text-gray-700 leading-relaxed mb-6">{plan.description}</p>
-                  
-                  <div className="space-y-2">
-                    <h4 className="font-bold text-gray-800 mb-3">Key Actions:</h4>
-                    {plan.actions.map((action, actionIndex) => (
-                      <div key={actionIndex} className="flex items-center space-x-3">
-                        <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />
-                        <span className="text-gray-600 text-sm">{action}</span>
-                      </div>
-                    ))}
-                  </div>
-                  
-                  <div 
-                    className="mt-6 flex items-center text-purple-600 font-medium group-hover:text-purple-800 transition-colors duration-300 cursor-pointer"
-                    onClick={() => openPlanModal(plan)}
-                  >
-                    <span>View Full Plan</span>
-                    <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform duration-300" />
-                  </div>
+                  <span className={`text-xs font-bold px-2 py-1 rounded-full ${getStatusColor(stat.status)}`}>
+                    {stat.status.toUpperCase()}
+                  </span>
                 </div>
+                <h3 className="text-4xl font-black text-gray-900 mb-1">{stat.number}</h3>
+                <p className="text-gray-600 font-bold">{stat.label}</p>
+                <p className="text-sm text-gray-400 mt-1">{stat.subLabel}</p>
               </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Implementation Phases */}
-      <section id="implementation" className="py-20 bg-gray-50">
+      {/* --- SECTION: JUSTIFICANDO LA NÓMINA (ROI) --- */}
+      <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4">
-          <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            animate={isVisible.implementation ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.8 }}
-            className="text-center mb-16"
+          <motion.div 
+            initial={{ opacity: 0 }} 
+            whileInView={{ opacity: 1 }}
+            className="text-center mb-12"
           >
-            <h2 className="text-5xl font-bold konecta-primary mb-6">Implementation Framework</h2>
-            <p className="text-xl text-gray-600">Structured approach to operational excellence recovery</p>
+            <h2 className="text-4xl font-black text-[#2800c8] mb-4">JUSTIFICANDO MI SUELDO 💰</h2>
+            <p className="text-xl text-gray-600">ROI del Coaching: Invertimos tiempo, cosechamos calidad.</p>
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <motion.div
-              initial={{ opacity: 0, x: -50 }}
-              animate={isVisible.implementation ? { opacity: 1, x: 0 } : {}}
-              transition={{ duration: 0.8, delay: 0.1 }}
-              className="bg-white rounded-2xl p-8 shadow-lg"
-            >
-              <div className="w-16 h-16 bg-gradient-to-br from-red-500 to-red-600 rounded-full flex items-center justify-center mb-6">
-                <span className="text-white text-2xl font-bold">1</span>
-              </div>
-              <h3 className="text-2xl font-bold konecta-primary mb-4">Immediate Actions</h3>
-              <p className="text-gray-600 mb-4">Days 1-7: Crisis stabilization and urgent interventions</p>
-              <ul className="space-y-2 text-sm text-gray-600">
-                <li>• Emergency workforce adjustments</li>
-                <li>• Real-time monitoring implementation</li>
-                <li>• Client communication protocols</li>
-                <li>• Weekend operations overhaul</li>
-              </ul>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 50 }}
-              animate={isVisible.implementation ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              className="bg-white rounded-2xl p-8 shadow-lg"
-            >
-              <div className="w-16 h-16 bg-gradient-to-br from-yellow-500 to-orange-500 rounded-full flex items-center justify-center mb-6">
-                <span className="text-white text-2xl font-bold">2</span>
-              </div>
-              <h3 className="text-2xl font-bold konecta-primary mb-4">Tactical Recovery</h3>
-              <p className="text-gray-600 mb-4">Weeks 2-3: Performance optimization and team revival</p>
-              <ul className="space-y-2 text-sm text-gray-600">
-                <li>• Diagnostic 1:1 sessions</li>
-                <li>• Skill-based training programs</li>
-                <li>• Recognition system launch</li>
-                <li>• Process improvement initiatives</li>
-              </ul>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, x: 50 }}
-              animate={isVisible.implementation ? { opacity: 1, x: 0 } : {}}
-              transition={{ duration: 0.8, delay: 0.3 }}
-              className="bg-white rounded-2xl p-8 shadow-lg"
-            >
-              <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 rounded-full flex items-center justify-center mb-6">
-                <span className="text-white text-2xl font-bold">3</span>
-              </div>
-              <h3 className="text-2xl font-bold konecta-primary mb-4">Sustainable Excellence</h3>
-              <p className="text-gray-600 mb-4">Week 4+: Long-term optimization and growth</p>
-              <ul className="space-y-2 text-sm text-gray-600">
-                <li>• Collaborative goal setting</li>
-                <li>• Continuous improvement culture</li>
-                <li>• Advanced analytics implementation</li>
-                <li>• Leadership development</li>
-              </ul>
-            </motion.div>
+            {/* Card 1 */}
+            <div className="bg-blue-50 rounded-2xl p-8 border border-blue-100 relative overflow-hidden">
+                <div className="absolute top-0 right-0 p-4 opacity-10"><Users size={100} /></div>
+                <h3 className="text-2xl font-bold text-blue-900 mb-2">La Misa Grupal</h3>
+                <div className="text-4xl font-black text-blue-600 mb-4">6.5h</div>
+                <p className="text-blue-800 font-medium">Workshop "Calidad Percibida" (18/Dic)</p>
+                <p className="text-sm text-blue-600 mt-2">13 Agentes alineados antes de Navidad.</p>
+            </div>
+            {/* Card 2 */}
+            <div className="bg-purple-50 rounded-2xl p-8 border border-purple-100 relative overflow-hidden">
+                <div className="absolute top-0 right-0 p-4 opacity-10"><Zap size={100} /></div>
+                <h3 className="text-2xl font-bold text-purple-900 mb-2">Flash Coaching</h3>
+                <div className="text-4xl font-black text-purple-600 mb-4">~5.2h</div>
+                <p className="text-purple-800 font-medium">Sesiones 1-on-1</p>
+                <p className="text-sm text-purple-600 mt-2">Corrección de rumbo en tiempo real.</p>
+            </div>
+            {/* Card 3 */}
+            <div className="bg-green-50 rounded-2xl p-8 border border-green-100 relative overflow-hidden">
+                <div className="absolute top-0 right-0 p-4 opacity-10"><TrendingUp size={100} /></div>
+                <h3 className="text-2xl font-bold text-green-900 mb-2">Resultado Final</h3>
+                <div className="text-4xl font-black text-green-600 mb-4">+10.2%</div>
+                <p className="text-green-800 font-medium">Incremento en CSAT</p>
+                <p className="text-sm text-green-600 mt-2">El negocio redondo de Diciembre.</p>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Meeting Information */}
-      <section id="meeting" className="py-20 bg-white">
+      {/* --- QUARTILES / AGENT TIERS --- */}
+      <section className="py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4">
-          <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            animate={isVisible.meeting ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.8 }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-5xl font-bold konecta-primary mb-6">Operations Leadership Meeting</h2>
-            <p className="text-xl text-gray-600">Strategic session for operational excellence recovery and team transformation</p>
-          </motion.div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={isVisible.meeting ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.6, delay: 0.1 }}
-              className="bg-gradient-to-br from-purple-600 to-blue-600 rounded-2xl p-8 text-white"
-            >
-              <Calendar className="w-12 h-12 mb-4" />
-              <h3 className="text-2xl font-bold mb-4">Meeting Schedule</h3>
-              <p className="text-lg mb-2">August 5, 2025</p>
-              <p className="text-lg mb-2">10:00 AM - 11:00 AM</p>
-              <p className="text-purple-200">Emergency operations review</p>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={isVisible.meeting ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="bg-gradient-to-br from-green-500 to-teal-500 rounded-2xl p-8 text-white"
-            >
-              <MapPin className="w-12 h-12 mb-4" />
-              <h3 className="text-2xl font-bold mb-4">Location</h3>
-              <p className="text-lg mb-2">Puerto Seco</p>
-              <p className="text-lg mb-2">Executive Conference Room</p>
-              <p className="text-green-200">Team leaders attendance required</p>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={isVisible.meeting ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.6, delay: 0.3 }}
-              className="bg-gradient-to-br from-orange-500 to-red-500 rounded-2xl p-8 text-white"
-            >
-              <BarChart3 className="w-12 h-12 mb-4" />
-              <h3 className="text-2xl font-bold mb-4">Agenda Focus</h3>
-              <p className="text-lg mb-2">Action plan presentation</p>
-              <p className="text-lg mb-2">Resource allocation review</p>
-              <p className="text-orange-200">Implementation timeline approval</p>
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* Contact Section */}
-      <section id="contact" className="py-20 konecta-gradient">
-        <div className="max-w-7xl mx-auto px-4 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            animate={isVisible.contact ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.8 }}
-          >
-            <h2 className="text-5xl font-bold text-white mb-8">Operations Leadership Contact</h2>
-            <p className="text-xl text-white/90 mb-12 max-w-2xl mx-auto">
-              Direct escalation channel for operational emergencies and strategic initiatives
-            </p>
-            
-            <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
-              <div className="flex items-center space-x-3 text-white">
-                <Phone className="w-6 h-6" />
-                <span className="text-lg">+57 322 902 2922 (Emergency)</span>
-              </div>
-              <div className="flex items-center space-x-3 text-white">
-                <Mail className="w-6 h-6" />
-                <span className="text-lg">mango_md_staff@konecta.com</span>
-              </div>
-            </div>
-
-            <div className="mt-12">
-              <button 
-                className="bg-yellow-300 text-gray-900 px-8 py-4 rounded-full font-bold text-lg hover:bg-yellow-200 transition-all duration-300 transform hover:scale-105 shadow-lg"
-                onClick={downloadReport}
+          <h2 className="text-4xl font-black text-center text-[#2800c8] mb-12">EL SALÓN DE LA FAMA (Y LA NOVELA)</h2>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {agents.map((agent, idx) => (
+              <motion.div
+                key={idx}
+                initial={{ opacity: 0, scale: 0.9 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: idx * 0.05 }}
+                className={`relative p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow ${getQuartileStyle(agent.quartile)}`}
               >
-                Download Full Report
-              </button>
-            </div>
-          </motion.div>
+                <div className="flex justify-between items-start mb-4">
+                  <div>
+                    <h3 className="font-bold text-lg text-gray-900 flex items-center gap-2">
+                        {agent.name} {agent.badge && <span>{agent.badge}</span>}
+                    </h3>
+                    <p className="text-xs font-bold uppercase tracking-wider text-gray-500">{agent.role}</p>
+                  </div>
+                  <span className={`text-xs font-black px-2 py-1 rounded ${
+                      agent.quartile === 'Q1' ? 'bg-yellow-200 text-yellow-800' : 
+                      agent.quartile === 'Q4' ? 'bg-red-200 text-red-800' : 'bg-gray-200 text-gray-700'
+                  }`}>
+                      {agent.quartile}
+                  </span>
+                </div>
+                
+                <div className="grid grid-cols-2 gap-4 mt-4">
+                    <div className="text-center bg-white/50 p-2 rounded-lg">
+                        <div className="text-xs text-gray-500">CSAT</div>
+                        <div className={`font-black text-lg ${parseInt(agent.csat) > 80 ? 'text-green-600' : parseInt(agent.csat) < 70 ? 'text-red-500' : 'text-yellow-600'}`}>
+                            {agent.csat}
+                        </div>
+                    </div>
+                    <div className="text-center bg-white/50 p-2 rounded-lg">
+                        <div className="text-xs text-gray-500">PROD</div>
+                        <div className="font-black text-lg text-blue-600">{agent.prod}</div>
+                    </div>
+                </div>
+
+                {agent.status === 'terminated' && (
+                    <div className="absolute inset-0 bg-white/80 backdrop-blur-sm flex items-center justify-center rounded-xl">
+                        <span className="bg-red-600 text-white px-4 py-2 rounded-full font-bold transform -rotate-12 shadow-lg">
+                            BAJA / RENUNCIA
+                        </span>
+                    </div>
+                )}
+              </motion.div>
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-gray-900 text-white py-12">
+      {/* --- PLAN DE ACCIÓN --- */}
+      <section id="action-plans" className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-black text-[#2800c8] mb-4">PLAN DE ATAQUE: ENERO 🥭</h2>
+            <p className="text-xl text-gray-600">Estrategias quirúrgicas para empezar el año ganando.</p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {actionPlans.map((plan, idx) => (
+              <motion.div
+                key={idx}
+                whileHover={{ y: -10 }}
+                className="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100 flex flex-col"
+              >
+                <div className={`h-2 bg-gradient-to-r ${plan.color}`} />
+                <div className="p-8 flex-grow">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className={`p-3 rounded-lg bg-gray-50 text-gray-700`}>
+                        <plan.icon size={24} />
+                    </div>
+                    <span className="text-xs font-bold text-red-500 bg-red-50 px-2 py-1 rounded-full">{plan.urgency}</span>
+                  </div>
+                  <h3 className="text-2xl font-bold text-gray-900 mb-3">{plan.title}</h3>
+                  <p className="text-gray-600 mb-6">{plan.description}</p>
+                  
+                  <div className="space-y-3">
+                    {plan.actions.map((action, i) => (
+                        <div key={i} className="flex items-center gap-2 text-sm text-gray-700">
+                            <CheckCircle size={16} className="text-green-500 flex-shrink-0" />
+                            {action}
+                        </div>
+                    ))}
+                  </div>
+                </div>
+                <div className="p-4 bg-gray-50 border-t border-gray-100">
+                    <button 
+                        onClick={() => { setSelectedPlan(plan); setIsModalOpen(true); }}
+                        className="w-full py-2 text-[#2800c8] font-bold hover:text-blue-700 flex items-center justify-center gap-2"
+                    >
+                        Ver Detalle Completo <ArrowRight size={16}/>
+                    </button>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* --- FOOTER --- */}
+      <footer className="bg-[#0a0a45] text-white py-12">
         <div className="max-w-7xl mx-auto px-4 text-center">
-          <div className="mb-8">
-            <Image 
-              src={LogoKonectaBlanco} 
-              alt="Corporate footer" 
-              className="w-full h-full mx-auto px-115"
-            />
-            
-            <p className="text-gray-400 max-w-2xl mx-auto">
-              Expert Team Leadership • Operational Excellence • Strategic Recovery Solutions
+            <div className="w-48 mx-auto mb-8 opacity-80">
+                <Image src={LogoKonectaBlanco} alt="Konecta" width={200} height={50} />
+            </div>
+            <p className="text-blue-200">
+                Reporte Generado por: <span className="text-yellow-400 font-bold">Marlon Martinez</span><br/>
+                Team Leader | Campaña Mango
             </p>
-          </div>
-          <div className="border-t border-gray-800 pt-8">
-            <p className="text-gray-400">
-              © 2025 Konecta. Confidential Leadership Review Materials.
-            </p>
-          </div>
+            <p className="text-xs text-blue-400 mt-8">© 2026 Confidential Operations Report</p>
         </div>
       </footer>
 
-      {/* Modal for Full Plan Details */}
+      {/* --- MODAL --- */}
       {isModalOpen && selectedPlan && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.9 }}
-            className="bg-white rounded-2xl max-w-4xl max-h-[90vh] overflow-y-auto shadow-2xl"
-          >
-            <div className="sticky top-0 bg-white border-b border-gray-200 p-6 flex justify-between items-center">
-              <h2 className="text-3xl font-bold konecta-primary">{selectedPlan.title}</h2>
-              <button
-                onClick={closePlanModal}
-                className="w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors"
-              >
-                ✕
-              </button>
-            </div>
-            
-            <div className="p-6">
-              <div className="mb-6">
-                <span className="px-4 py-2 bg-red-100 text-red-700 text-sm font-bold rounded-full">
-                  {selectedPlan.urgency}
-                </span>
-              </div>
-
-              <div className="space-y-8">
-                <section>
-                  <h3 className="text-xl font-bold konecta-primary mb-3">Situation Analysis</h3>
-                  <p className="text-gray-700 leading-relaxed">{selectedPlan.fullPlan.situation}</p>
-                </section>
-
-                <section>
-                  <h3 className="text-xl font-bold konecta-primary mb-3">Business Impact</h3>
-                  <p className="text-gray-700 leading-relaxed">{selectedPlan.fullPlan.impact}</p>
-                </section>
-
-                <section>
-                  <h3 className="text-xl font-bold konecta-primary mb-3">Root Cause Analysis</h3>
-                  <p className="text-gray-700 leading-relaxed">{selectedPlan.fullPlan.rootCause}</p>
-                </section>
-
-                <section>
-                  <h3 className="text-xl font-bold konecta-primary mb-3">Detailed Action Plan</h3>
-                  <div className="space-y-6">
-                    {selectedPlan.fullPlan.detailedActions.map((phase, index: number) => (
-                      <div key={index} className="border-l-4 border-purple-600 pl-4">
-                        <h4 className="text-lg font-bold text-gray-800 mb-3">{phase.phase}</h4>
-                        <ul className="space-y-2">
-                          {phase.tasks.map((task: string, taskIndex: number) => (
-                            <li key={taskIndex} className="flex items-start space-x-3">
-                              <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-                              <span className="text-gray-700">{task}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    ))}
-                  </div>
-                </section>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <section>
-                    <h3 className="text-xl font-bold konecta-primary mb-3">Required Resources</h3>
-                    <p className="text-gray-700 leading-relaxed">{selectedPlan.fullPlan.resources}</p>
-                  </section>
-
-                  <section>
-                    <h3 className="text-xl font-bold konecta-primary mb-3">Timeline</h3>
-                    <p className="text-gray-700 leading-relaxed">{selectedPlan.fullPlan.timeline}</p>
-                  </section>
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+            <motion.div 
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="bg-white rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto"
+            >
+                <div className={`p-6 bg-gradient-to-r ${selectedPlan.color} text-white`}>
+                    <h2 className="text-3xl font-bold mb-2">{selectedPlan.title}</h2>
+                    <p className="opacity-90">{selectedPlan.fullPlan.situation}</p>
                 </div>
+                <div className="p-8 space-y-6">
+                    <div>
+                        <h4 className="font-bold text-gray-900 mb-2 flex items-center gap-2"><AlertTriangle size={18}/> Causa Raíz</h4>
+                        <p className="text-gray-600">{selectedPlan.fullPlan.rootCause}</p>
+                    </div>
+                    
+                    <div>
+                        <h4 className="font-bold text-gray-900 mb-2 flex items-center gap-2"><Target size={18}/> Acciones por Fase</h4>
+                        <div className="space-y-4">
+                            {selectedPlan.fullPlan.detailedActions.map((phase, i) => (
+                                <div key={i} className="bg-gray-50 p-4 rounded-lg">
+                                    <p className="font-bold text-sm text-[#2800c8] mb-2">{phase.phase}</p>
+                                    <ul className="list-disc list-inside text-sm text-gray-600 space-y-1">
+                                        {phase.tasks.map((t, j) => <li key={j}>{t}</li>)}
+                                    </ul>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
 
-                <section>
-                  <h3 className="text-xl font-bold konecta-primary mb-3">Success Metrics</h3>
-                  <p className="text-gray-700 leading-relaxed">{selectedPlan.fullPlan.success_metrics}</p>
-                </section>
-              </div>
-
-              <div className="mt-8 flex justify-end space-x-4">
-                <button
-                  onClick={closePlanModal}
-                  className="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
-                >
-                  Close
-                </button>
-                <button
-                  onClick={() => selectedPlan && downloadPlanReport(selectedPlan)}
-                  className="px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
-                >
-                  Download This Plan
-                </button>
-              </div>
-            </div>
-          </motion.div>
+                    <div className="flex gap-4 pt-4">
+                        <button onClick={() => setIsModalOpen(false)} className="flex-1 py-3 rounded-xl border border-gray-200 font-bold text-gray-600 hover:bg-gray-50">
+                            Cerrar
+                        </button>
+                    </div>
+                </div>
+            </motion.div>
         </div>
       )}
     </div>

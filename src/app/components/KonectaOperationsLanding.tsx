@@ -167,7 +167,7 @@ const KonectaOperationsLanding = () => {
           { phase: "Lanzamiento", tasks: ["Comunicar reglas claras", "Crear tablero de posiciones"] },
           { phase: "Premiación", tasks: ["Validación de métricas Jueves PM", "Autorización de salida Viernes"] }
         ],
-        resources: "Horas de compensatorio, Budget de bienestar",
+        resources: "Horas de compensatorio, Budget de operación",
         timeline: "Todo Enero",
         success_metrics: "30% del equipo logrando la doble meta"
       }

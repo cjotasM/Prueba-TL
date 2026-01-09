@@ -69,7 +69,7 @@ const KonectaOperationsLanding = () => {
     setFlippedCards(prev => ({...prev, [index]: !prev[index]}))
   }
 
-  // DATOS
+  // DATOS: NOVIEMBRE VS DICIEMBRE
   const flippableStats: FlippableStat[] = [
     { 
       icon: HeartHandshake, 
@@ -79,7 +79,8 @@ const KonectaOperationsLanding = () => {
     { 
       icon: Zap, 
       nov: { number: "6.19", label: "Prod. Noviembre", subLabel: "Modo tortuga", status: "critical" },
-      dec: { number: "7.39", label: "Prod. Diciembre", subLabel: "Casi en la meta (7.5)", status: "warning" }
+      // AQUÍ ESTÁ EL CAMBIO SOLICITADO
+      dec: { number: "7.39", label: "Prod. Diciembre", subLabel: "¡Equivale a ganar 1 agente extra! 🤖", status: "warning" }
     },
     { 
       icon: Clock, 
@@ -206,7 +207,7 @@ La receta: Capacitación, Látigo con cariño (metas diarias) y sacar las manzan
 
 2. SCORECARD (COMPARATIVO)
 - CSAT: Nov 67.7% -> Dic 77.9% ✅
-- Prod: Nov 6.19 -> Dic 7.39 ⚠️
+- Prod: Nov 6.19 -> Dic 7.39 (¡Subir 1.2 es como ganar 1 agente gratis! 🤖)
 - Adherencia: Nov 90.8% -> Dic 94.9% ✅
 
 3. JUSTIFICANDO MI SUELDO (ROI Coaching)
@@ -283,7 +284,6 @@ La receta: Capacitación, Látigo con cariño (metas diarias) y sacar las manzan
 
       {/* --- HERO SECTION MODIFICADO --- */}
       <section className="relative h-[80vh] flex items-center justify-center overflow-hidden konecta-gradient">
-        {/* IMAGEN DE FONDO AJUSTADA */}
         <div className="absolute inset-0 z-0 flex items-center justify-center pointer-events-none">
            <div className="relative w-full h-full max-w-5xl opacity-30 p-20">
               <Image 

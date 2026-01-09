@@ -5,13 +5,13 @@ import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion'
 import { 
   ChevronDown, Users, Target, TrendingUp, Clock, 
   ArrowRight, AlertTriangle, CheckCircle, 
-  Award, Zap, BrainCircuit, HeartHandshake, UserX, RotateCw
+  Award, Zap, BrainCircuit, HeartHandshake, UserX, RotateCw, Calculator, Scale
 } from 'lucide-react'
 import Image from 'next/image'
 import MangoBlanco from '../../img/MangoBlanco.png'
 import LogoKonectaBlanco from '../../img/Konecta_Logo_RGB_White.png'
 
-// --- NUEVAS INTERFACES PARA EL EFECTO FLIP ---
+// --- INTERFACES ---
 interface StatDataPoint {
   number: string
   label: string
@@ -60,7 +60,6 @@ interface ActionPlan {
 const KonectaOperationsLanding = () => {
   const [selectedPlan, setSelectedPlan] = useState<ActionPlan | null>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
-  // Estado para controlar qué tarjetas están volteadas individualmente
   const [flippedCards, setFlippedCards] = useState<{[key: number]: boolean}>({})
 
   const { scrollY } = useScroll()
@@ -70,7 +69,7 @@ const KonectaOperationsLanding = () => {
     setFlippedCards(prev => ({...prev, [index]: !prev[index]}))
   }
 
-  // DATOS ACTUALIZADOS: NOVIEMBRE VS DICIEMBRE
+  // DATOS: NOVIEMBRE VS DICIEMBRE
   const flippableStats: FlippableStat[] = [
     { 
       icon: HeartHandshake, 
@@ -94,25 +93,22 @@ const KonectaOperationsLanding = () => {
     }
   ]
 
-  // AGENTES ORGANIZADOS POR CUARTILES
+  // AGENTES
   const agents: AgentProfile[] = [
     // Q1 - The Stars
     { name: "Claudia Ardila", role: "The MVP", csat: "84%", prod: "9.79", quartile: "Q1", status: "active", badge: "👑" },
     { name: "Salomé Jaramillo", role: "Quality Queen", csat: "92%", prod: "6.68", quartile: "Q1", status: "active", badge: "🌟" },
     { name: "Sara Polo", role: "Consistency", csat: "85%", prod: "6.90", quartile: "Q1", status: "active" },
     { name: "Juan José Marin", role: "High Performer", csat: "83%", prod: "7.62", quartile: "Q1", status: "active" },
-    
-    // Q2 - The Backbone
+    // Q2
     { name: "Rosa Tuberquia", role: "Solid Player", csat: "83%", prod: "7.06", quartile: "Q2", status: "active" },
     { name: "Jhony Morales", role: "Rising Star", csat: "75%", prod: "6.67", quartile: "Q2", status: "active" },
     { name: "Kelly Londoño", role: "Solid Player", csat: "70%", prod: "7.66", quartile: "Q2", status: "active" },
-    
-    // Q3 - The Opportunity
+    // Q3
     { name: "Natalia Vásquez", role: "Developing", csat: "67%", prod: "6.97", quartile: "Q3", status: "active" },
     { name: "Luisa Zapata", role: "Developing", csat: "64%", prod: "7.25", quartile: "Q3", status: "active" },
     { name: "Alva Blanquicett", role: "Developing", csat: "58%", prod: "7.10", quartile: "Q3", status: "active" },
-
-    // Q4 - The Novel (Drama)
+    // Q4
     { name: "Fabiana Ríos", role: "Statistical Victim", csat: "44%", prod: "8.69", quartile: "Q4", status: "risk", badge: "📉" },
     { name: "Valery Álvarez", role: "Needs Speed", csat: "87%", prod: "5.83", quartile: "Q4", status: "risk", badge: "🐢" },
     { name: "Juliana Cardona", role: "Game Over", csat: "44%", prod: "8.53", quartile: "Q4", status: "terminated", badge: "👋" },
@@ -243,7 +239,7 @@ La receta: Capacitación, Látigo con cariño (metas diarias) y sacar las manzan
     document.body.removeChild(element)
   }
 
-  // Componente interno para la cara de la tarjeta
+  // Componente interno para las caras de la tarjeta
   const StatCardFace = ({ data, icon: Icon, isBack = false }: { data: StatDataPoint, icon: React.ElementType, isBack?: boolean }) => (
     <div className={`absolute inset-0 h-full w-full rounded-2xl p-6 flex flex-col justify-between shadow-xl border-t-4 ${getStatusColor(data.status)} ${isBack ? 'bg-white' : 'bg-gray-50'}`}
          style={{ backfaceVisibility: 'hidden', transform: isBack ? 'rotateY(180deg)' : 'rotateY(0deg)' }}>
@@ -341,18 +337,13 @@ La receta: Capacitación, Látigo con cariño (metas diarias) y sacar las manzan
             {flippableStats.map((stat, idx) => {
               const isFlipped = flippedCards[idx] || false;
               return (
-                // Contenedor con perspectiva
                 <div key={idx} className="perspective-1000 h-full cursor-pointer group" onClick={() => toggleFlip(idx)}>
-                  {/* Elemento interno que rota */}
                   <motion.div
                     className="relative w-full h-full transform-style-3d transition-transform duration-700"
                     animate={{ rotateY: isFlipped ? 180 : 0 }}
                     transition={{ type: "spring", stiffness: 260, damping: 20 }}
                   >
-                    {/* Cara Frontal (Noviembre) */}
                     <StatCardFace data={stat.nov} icon={stat.icon} />
-                    
-                    {/* Cara Trasera (Diciembre) */}
                     <StatCardFace data={stat.dec} icon={stat.icon} isBack={true} />
                   </motion.div>
                 </div>
@@ -408,7 +399,7 @@ La receta: Capacitación, Látigo con cariño (metas diarias) y sacar las manzan
         <div className="max-w-7xl mx-auto px-4">
           <h2 className="text-4xl font-black text-center text-[#2800c8] mb-12">EL SALÓN DE LA FAMA (Y LA NOVELA)</h2>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
             {agents.map((agent, idx) => (
               <motion.div
                 key={idx}
@@ -456,6 +447,55 @@ La receta: Capacitación, Látigo con cariño (metas diarias) y sacar las manzan
               </motion.div>
             ))}
           </div>
+
+          {/* --- EXPLICACIÓN DE CÁLCULO --- */}
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            className="bg-white rounded-2xl p-8 border border-gray-200 shadow-sm max-w-4xl mx-auto"
+          >
+             <h3 className="text-2xl font-bold text-[#2800c8] mb-6 flex items-center gap-2">
+                <Calculator className="text-yellow-500"/> ¿Cómo rayos calculamos esto? (La Ciencia)
+             </h3>
+             <p className="text-gray-600 mb-6 text-lg">
+                No jugamos a los dados. Usamos una <strong>Matriz de Desempeño (9-Box simplificado)</strong> cruzando las dos variables que mueven este negocio:
+             </p>
+             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="space-y-4">
+                    <div className="flex items-start gap-3">
+                        <div className="bg-yellow-100 p-2 rounded-lg text-yellow-700 mt-1"><Award size={20}/></div>
+                        <div>
+                            <h4 className="font-bold text-gray-900">Q1: La Élite (Stars)</h4>
+                            <p className="text-sm text-gray-600">Alta Calidad (&gt;80%) + Alta Velocidad. Son el equilibrio perfecto.</p>
+                        </div>
+                    </div>
+                    <div className="flex items-start gap-3">
+                        <div className="bg-blue-100 p-2 rounded-lg text-blue-700 mt-1"><Users size={20}/></div>
+                        <div>
+                            <h4 className="font-bold text-gray-900">Q2: El Núcleo (Core)</h4>
+                            <p className="text-sm text-gray-600">Cumplen consistentemente. Son la columna vertebral de la operación.</p>
+                        </div>
+                    </div>
+                </div>
+                <div className="space-y-4">
+                    <div className="flex items-start gap-3">
+                        <div className="bg-orange-100 p-2 rounded-lg text-orange-700 mt-1"><Scale size={20}/></div>
+                        <div>
+                            <h4 className="font-bold text-gray-900">Q3: En Desarrollo</h4>
+                            <p className="text-sm text-gray-600">Falta pulir una de las dos variables (o muy lentos o calidad inestable).</p>
+                        </div>
+                    </div>
+                    <div className="flex items-start gap-3">
+                        <div className="bg-red-100 p-2 rounded-lg text-red-700 mt-1"><AlertTriangle size={20}/></div>
+                        <div>
+                            <h4 className="font-bold text-gray-900">Q4: Alerta Roja</h4>
+                            <p className="text-sm text-gray-600">Bajo CSAT (&lt;50%) o conductas de riesgo (Call Avoidance) aunque sean rápidos.</p>
+                        </div>
+                    </div>
+                </div>
+             </div>
+          </motion.div>
+
         </div>
       </section>
 

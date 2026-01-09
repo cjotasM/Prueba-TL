@@ -2,10 +2,10 @@
 
 import React, { useState } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
-import { 
-  ChevronDown, Users, Target, TrendingUp, Clock, 
-  ArrowRight, AlertTriangle, CheckCircle, 
-  Award, Zap, BrainCircuit, HeartHandshake, UserX 
+import {
+  ChevronDown, Users, Target, TrendingUp, Clock,
+  ArrowRight, AlertTriangle, CheckCircle,
+  Award, Zap, BrainCircuit, HeartHandshake, UserX
 } from 'lucide-react'
 import Image from 'next/image'
 // Asegúrate de que las rutas sean correctas según tu estructura
@@ -74,12 +74,12 @@ const KonectaOperationsLanding = () => {
     { name: "Salomé Jaramillo", role: "Quality Queen", csat: "92%", prod: "6.68", quartile: "Q1", status: "active", badge: "🌟" },
     { name: "Sara Polo", role: "Consistency", csat: "85%", prod: "6.90", quartile: "Q1", status: "active" },
     { name: "Juan José Marin", role: "High Performer", csat: "83%", prod: "7.62", quartile: "Q1", status: "active" },
-    
+
     // Q2 - The Backbone
     { name: "Rosa Tuberquia", role: "Solid Player", csat: "83%", prod: "7.06", quartile: "Q2", status: "active" },
     { name: "Jhony Morales", role: "Rising Star", csat: "75%", prod: "6.67", quartile: "Q2", status: "active" },
     { name: "Kelly Londoño", role: "Solid Player", csat: "70%", prod: "7.66", quartile: "Q2", status: "active" },
-    
+
     // Q3 - The Opportunity
     { name: "Natalia Vásquez", role: "Developing", csat: "67%", prod: "6.97", quartile: "Q3", status: "active" },
     { name: "Luisa Zapata", role: "Developing", csat: "64%", prod: "7.25", quartile: "Q3", status: "active" },
@@ -156,7 +156,7 @@ const KonectaOperationsLanding = () => {
 
   // --- HELPER FUNCTIONS ---
   const getStatusColor = (status: string) => {
-    switch(status) {
+    switch (status) {
       case 'excellent': return 'text-green-600 bg-green-100 border-green-200'
       case 'warning': return 'text-yellow-600 bg-yellow-100 border-yellow-200'
       case 'critical': return 'text-red-600 bg-red-100 border-red-200'
@@ -166,7 +166,7 @@ const KonectaOperationsLanding = () => {
   }
 
   const getQuartileStyle = (quartile: string) => {
-    switch(quartile) {
+    switch (quartile) {
       case 'Q1': return 'border-l-4 border-yellow-400 bg-gradient-to-r from-yellow-50 to-white'
       case 'Q2': return 'border-l-4 border-blue-400 bg-white'
       case 'Q3': return 'border-l-4 border-orange-300 bg-white'
@@ -207,7 +207,7 @@ La receta: Capacitación, Látigo con cariño (metas diarias) y sacar las manzan
 © 2026 Limonada de Mango Ops.
     `
     const element = document.createElement('a')
-    const file = new Blob([reportText], {type: 'text/plain;charset=utf-8'})
+    const file = new Blob([reportText], { type: 'text/plain;charset=utf-8' })
     element.href = URL.createObjectURL(file)
     element.download = `MBR_Limonada_Mango_Dic2025.txt`
     document.body.appendChild(element)
@@ -231,11 +231,11 @@ La receta: Capacitación, Látigo con cariño (metas diarias) y sacar las manzan
       {/* --- HERO SECTION --- */}
       <section className="relative h-[80vh] flex items-center justify-center overflow-hidden konecta-gradient">
         <div className="absolute inset-0 opacity-10">
-           <Image src={MangoBlanco} alt="Logo Background" layout="fill" objectFit="contain" className="opacity-20 transform scale-150" />
+          <Image src={MangoBlanco} alt="Logo Background" layout="fill" objectFit="contain" className="opacity-20 transform scale-150" />
         </div>
-        
+
         <motion.div style={{ y: y1 }} className="relative z-10 text-center text-white px-4">
-          <motion.div 
+          <motion.div
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ duration: 0.5 }}
@@ -244,7 +244,7 @@ La receta: Capacitación, Látigo con cariño (metas diarias) y sacar las manzan
             MONTHLY BUSINESS REVIEW
           </motion.div>
           <h1 className="text-6xl md:text-8xl font-black mb-4 tracking-tight">
-            LIMONADA <br/>
+            LIMONADA <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-yellow-500">
               DE MANGO
             </span>
@@ -253,12 +253,12 @@ La receta: Capacitación, Látigo con cariño (metas diarias) y sacar las manzan
             Edición: &quot;Sobrevivientes de Diciembre&quot;
           </p>
           <div className="mt-8 flex gap-4 justify-center">
-             <button onClick={() => document.getElementById('stats')?.scrollIntoView({behavior:'smooth'})} className="bg-white text-blue-900 px-8 py-3 rounded-full font-bold hover:bg-yellow-300 transition-colors shadow-lg flex items-center gap-2">
-                Ver Resultados <ChevronDown size={20}/>
-             </button>
-             <button onClick={downloadReport} className="border-2 border-white text-white px-8 py-3 rounded-full font-bold hover:bg-white/10 transition-colors">
-                Descargar TXT
-             </button>
+            <button onClick={() => document.getElementById('stats')?.scrollIntoView({ behavior: 'smooth' })} className="bg-white text-blue-900 px-8 py-3 rounded-full font-bold hover:bg-yellow-300 transition-colors shadow-lg flex items-center gap-2">
+              Ver Resultados <ChevronDown size={20} />
+            </button>
+            <button onClick={downloadReport} className="border-2 border-white text-white px-8 py-3 rounded-full font-bold hover:bg-white/10 transition-colors">
+              Descargar TXT
+            </button>
           </div>
         </motion.div>
       </section>
@@ -274,11 +274,10 @@ La receta: Capacitación, Látigo con cariño (metas diarias) y sacar las manzan
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: idx * 0.1 }}
-                className={`bg-white p-6 rounded-2xl shadow-xl border-t-4 ${
-                    stat.status === 'excellent' ? 'border-green-500' : 
-                    stat.status === 'warning' ? 'border-yellow-500' : 
-                    stat.status === 'target' ? 'border-purple-500' : 'border-gray-200'
-                }`}
+                className={`bg-white p-6 rounded-2xl shadow-xl border-t-4 ${stat.status === 'excellent' ? 'border-green-500' :
+                    stat.status === 'warning' ? 'border-yellow-500' :
+                      stat.status === 'target' ? 'border-purple-500' : 'border-gray-200'
+                  }`}
               >
                 <div className="flex justify-between items-start mb-4">
                   <div className={`p-3 rounded-xl ${getStatusColor(stat.status)}`}>
@@ -300,8 +299,8 @@ La receta: Capacitación, Látigo con cariño (metas diarias) y sacar las manzan
       {/* --- SECTION: JUSTIFICANDO LA NÓMINA (ROI) --- */}
       <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4">
-          <motion.div 
-            initial={{ opacity: 0 }} 
+          <motion.div
+            initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             className="text-center mb-12"
           >
@@ -312,27 +311,27 @@ La receta: Capacitación, Látigo con cariño (metas diarias) y sacar las manzan
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {/* Card 1 */}
             <div className="bg-blue-50 rounded-2xl p-8 border border-blue-100 relative overflow-hidden">
-                <div className="absolute top-0 right-0 p-4 opacity-10"><Users size={100} /></div>
-                <h3 className="text-2xl font-bold text-blue-900 mb-2">La Misa Grupal</h3>
-                <div className="text-4xl font-black text-blue-600 mb-4">6.5h</div>
-                <p className="text-blue-800 font-medium">Workshop &quot;Calidad Percibida&quot; (18/Dic)</p>
-                <p className="text-sm text-blue-600 mt-2">13 Agentes alineados antes de Navidad.</p>
+              <div className="absolute top-0 right-0 p-4 opacity-10"><Users size={100} /></div>
+              <h3 className="text-2xl font-bold text-blue-900 mb-2">La Misa Grupal</h3>
+              <div className="text-4xl font-black text-blue-600 mb-4">6.5h</div>
+              <p className="text-blue-800 font-medium">Workshop &quot;Calidad Percibida&quot; (18/Dic)</p>
+              <p className="text-sm text-blue-600 mt-2">13 Agentes alineados antes de Navidad.</p>
             </div>
             {/* Card 2 */}
             <div className="bg-purple-50 rounded-2xl p-8 border border-purple-100 relative overflow-hidden">
-                <div className="absolute top-0 right-0 p-4 opacity-10"><Zap size={100} /></div>
-                <h3 className="text-2xl font-bold text-purple-900 mb-2">Flash Coaching</h3>
-                <div className="text-4xl font-black text-purple-600 mb-4">~5.2h</div>
-                <p className="text-purple-800 font-medium">Sesiones 1-on-1</p>
-                <p className="text-sm text-purple-600 mt-2">Corrección de rumbo en tiempo real.</p>
+              <div className="absolute top-0 right-0 p-4 opacity-10"><Zap size={100} /></div>
+              <h3 className="text-2xl font-bold text-purple-900 mb-2">Flash Coaching</h3>
+              <div className="text-4xl font-black text-purple-600 mb-4">~5.2h</div>
+              <p className="text-purple-800 font-medium">Sesiones 1-on-1</p>
+              <p className="text-sm text-purple-600 mt-2">Corrección de rumbo en tiempo real.</p>
             </div>
             {/* Card 3 */}
             <div className="bg-green-50 rounded-2xl p-8 border border-green-100 relative overflow-hidden">
-                <div className="absolute top-0 right-0 p-4 opacity-10"><TrendingUp size={100} /></div>
-                <h3 className="text-2xl font-bold text-green-900 mb-2">Resultado Final</h3>
-                <div className="text-4xl font-black text-green-600 mb-4">+10.2%</div>
-                <p className="text-green-800 font-medium">Incremento en CSAT</p>
-                <p className="text-sm text-green-600 mt-2">El negocio redondo de Diciembre.</p>
+              <div className="absolute top-0 right-0 p-4 opacity-10"><TrendingUp size={100} /></div>
+              <h3 className="text-2xl font-bold text-green-900 mb-2">Resultado Final</h3>
+              <div className="text-4xl font-black text-green-600 mb-4">+10.2%</div>
+              <p className="text-green-800 font-medium">Incremento en CSAT</p>
+              <p className="text-sm text-green-600 mt-2">El negocio redondo de Diciembre.</p>
             </div>
           </div>
         </div>
@@ -342,7 +341,7 @@ La receta: Capacitación, Látigo con cariño (metas diarias) y sacar las manzan
       <section className="py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4">
           <h2 className="text-4xl font-black text-center text-[#2800c8] mb-12">EL SALÓN DE LA FAMA (Y LA NOVELA)</h2>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {agents.map((agent, idx) => (
               <motion.div
@@ -351,42 +350,42 @@ La receta: Capacitación, Látigo con cariño (metas diarias) y sacar las manzan
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
                 transition={{ delay: idx * 0.05 }}
-                className={`relative p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow ${getQuartileStyle(agent.quartile)}`}
+                className={`relative p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow ${getQuartileStyle(agent.quartile)} ${agent.status === 'terminated' ? 'opacity-75 grayscale-[0.5]' : ''}`}
               >
                 <div className="flex justify-between items-start mb-4">
                   <div>
                     <h3 className="font-bold text-lg text-gray-900 flex items-center gap-2">
-                        {agent.name} {agent.badge && <span>{agent.badge}</span>}
+                      {agent.name} {agent.badge && <span>{agent.badge}</span>}
                     </h3>
                     <p className="text-xs font-bold uppercase tracking-wider text-gray-500">{agent.role}</p>
                   </div>
-                  <span className={`text-xs font-black px-2 py-1 rounded ${
-                      agent.quartile === 'Q1' ? 'bg-yellow-200 text-yellow-800' : 
+                  <span className={`text-xs font-black px-2 py-1 rounded ${agent.quartile === 'Q1' ? 'bg-yellow-200 text-yellow-800' :
                       agent.quartile === 'Q4' ? 'bg-red-200 text-red-800' : 'bg-gray-200 text-gray-700'
-                  }`}>
-                      {agent.quartile}
+                    }`}>
+                    {agent.quartile}
                   </span>
                 </div>
-                
+
                 <div className="grid grid-cols-2 gap-4 mt-4">
-                    <div className="text-center bg-white/50 p-2 rounded-lg">
-                        <div className="text-xs text-gray-500">CSAT</div>
-                        <div className={`font-black text-lg ${parseInt(agent.csat) > 80 ? 'text-green-600' : parseInt(agent.csat) < 70 ? 'text-red-500' : 'text-yellow-600'}`}>
-                            {agent.csat}
-                        </div>
+                  <div className="text-center bg-white/50 p-2 rounded-lg">
+                    <div className="text-xs text-gray-500">CSAT</div>
+                    <div className={`font-black text-lg ${parseInt(agent.csat) > 80 ? 'text-green-600' : parseInt(agent.csat) < 70 ? 'text-red-500' : 'text-yellow-600'}`}>
+                      {agent.csat}
                     </div>
-                    <div className="text-center bg-white/50 p-2 rounded-lg">
-                        <div className="text-xs text-gray-500">PROD</div>
-                        <div className="font-black text-lg text-blue-600">{agent.prod}</div>
-                    </div>
+                  </div>
+                  <div className="text-center bg-white/50 p-2 rounded-lg">
+                    <div className="text-xs text-gray-500">PROD</div>
+                    <div className="font-black text-lg text-blue-600">{agent.prod}</div>
+                  </div>
                 </div>
 
+                {/* CORRECCIÓN AQUÍ: Quitamos el fondo blanco y el blur, solo dejamos el sello */}
                 {agent.status === 'terminated' && (
-                    <div className="absolute inset-0 bg-white/80 backdrop-blur-sm flex items-center justify-center rounded-xl">
-                        <span className="bg-red-600 text-white px-4 py-2 rounded-full font-bold transform -rotate-12 shadow-lg">
-                            BAJA / RENUNCIA
-                        </span>
-                    </div>
+                  <div className="absolute inset-0 flex items-center justify-center rounded-xl pointer-events-none">
+                    <span className="bg-red-600/90 text-white px-4 py-2 rounded-full font-bold transform -rotate-12 shadow-xl border-2 border-white z-10">
+                      BAJA / RENUNCIA
+                    </span>
+                  </div>
                 )}
               </motion.div>
             ))}
@@ -413,29 +412,29 @@ La receta: Capacitación, Látigo con cariño (metas diarias) y sacar las manzan
                 <div className="p-8 flex-grow">
                   <div className="flex items-center gap-3 mb-4">
                     <div className={`p-3 rounded-lg bg-gray-50 text-gray-700`}>
-                        <plan.icon size={24} />
+                      <plan.icon size={24} />
                     </div>
                     <span className="text-xs font-bold text-red-500 bg-red-50 px-2 py-1 rounded-full">{plan.urgency}</span>
                   </div>
                   <h3 className="text-2xl font-bold text-gray-900 mb-3">{plan.title}</h3>
                   <p className="text-gray-600 mb-6">{plan.description}</p>
-                  
+
                   <div className="space-y-3">
                     {plan.actions.map((action, i) => (
-                        <div key={i} className="flex items-center gap-2 text-sm text-gray-700">
-                            <CheckCircle size={16} className="text-green-500 flex-shrink-0" />
-                            {action}
-                        </div>
+                      <div key={i} className="flex items-center gap-2 text-sm text-gray-700">
+                        <CheckCircle size={16} className="text-green-500 flex-shrink-0" />
+                        {action}
+                      </div>
                     ))}
                   </div>
                 </div>
                 <div className="p-4 bg-gray-50 border-t border-gray-100">
-                    <button 
-                        onClick={() => { setSelectedPlan(plan); setIsModalOpen(true); }}
-                        className="w-full py-2 text-[#2800c8] font-bold hover:text-blue-700 flex items-center justify-center gap-2"
-                    >
-                        Ver Detalle Completo <ArrowRight size={16}/>
-                    </button>
+                  <button
+                    onClick={() => { setSelectedPlan(plan); setIsModalOpen(true); }}
+                    className="w-full py-2 text-[#2800c8] font-bold hover:text-blue-700 flex items-center justify-center gap-2"
+                  >
+                    Ver Detalle Completo <ArrowRight size={16} />
+                  </button>
                 </div>
               </motion.div>
             ))}
@@ -446,56 +445,56 @@ La receta: Capacitación, Látigo con cariño (metas diarias) y sacar las manzan
       {/* --- FOOTER --- */}
       <footer className="bg-[#0a0a45] text-white py-12">
         <div className="max-w-7xl mx-auto px-4 text-center">
-            <div className="w-48 mx-auto mb-8 opacity-80">
-                <Image src={LogoKonectaBlanco} alt="Konecta" width={200} height={50} />
-            </div>
-            <p className="text-blue-200">
-                Reporte Generado por: <span className="text-yellow-400 font-bold">Marlon Martinez</span><br/>
-                Team Leader | Campaña Mango
-            </p>
-            <p className="text-xs text-blue-400 mt-8">© 2026 Confidential Operations Report</p>
+          <div className="w-48 mx-auto mb-8 opacity-80">
+            <Image src={LogoKonectaBlanco} alt="Konecta" width={200} height={50} />
+          </div>
+          <p className="text-blue-200">
+            Reporte Generado por: <span className="text-yellow-400 font-bold">Marlon Martinez</span><br />
+            Team Leader | Campaña Mango
+          </p>
+          <p className="text-xs text-blue-400 mt-8">© 2026 Confidential Operations Report</p>
         </div>
       </footer>
 
       {/* --- MODAL --- */}
       {isModalOpen && selectedPlan && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-            <motion.div 
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                className="bg-white rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto"
-            >
-                <div className={`p-6 bg-gradient-to-r ${selectedPlan.color} text-white`}>
-                    <h2 className="text-3xl font-bold mb-2">{selectedPlan.title}</h2>
-                    <p className="opacity-90">{selectedPlan.fullPlan.situation}</p>
-                </div>
-                <div className="p-8 space-y-6">
-                    <div>
-                        <h4 className="font-bold text-gray-900 mb-2 flex items-center gap-2"><AlertTriangle size={18}/> Causa Raíz</h4>
-                        <p className="text-gray-600">{selectedPlan.fullPlan.rootCause}</p>
-                    </div>
-                    
-                    <div>
-                        <h4 className="font-bold text-gray-900 mb-2 flex items-center gap-2"><Target size={18}/> Acciones por Fase</h4>
-                        <div className="space-y-4">
-                            {selectedPlan.fullPlan.detailedActions.map((phase, i) => (
-                                <div key={i} className="bg-gray-50 p-4 rounded-lg">
-                                    <p className="font-bold text-sm text-[#2800c8] mb-2">{phase.phase}</p>
-                                    <ul className="list-disc list-inside text-sm text-gray-600 space-y-1">
-                                        {phase.tasks.map((t, j) => <li key={j}>{t}</li>)}
-                                    </ul>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="bg-white rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto"
+          >
+            <div className={`p-6 bg-gradient-to-r ${selectedPlan.color} text-white`}>
+              <h2 className="text-3xl font-bold mb-2">{selectedPlan.title}</h2>
+              <p className="opacity-90">{selectedPlan.fullPlan.situation}</p>
+            </div>
+            <div className="p-8 space-y-6">
+              <div>
+                <h4 className="font-bold text-gray-900 mb-2 flex items-center gap-2"><AlertTriangle size={18} /> Causa Raíz</h4>
+                <p className="text-gray-600">{selectedPlan.fullPlan.rootCause}</p>
+              </div>
 
-                    <div className="flex gap-4 pt-4">
-                        <button onClick={() => setIsModalOpen(false)} className="flex-1 py-3 rounded-xl border border-gray-200 font-bold text-gray-600 hover:bg-gray-50">
-                            Cerrar
-                        </button>
+              <div>
+                <h4 className="font-bold text-gray-900 mb-2 flex items-center gap-2"><Target size={18} /> Acciones por Fase</h4>
+                <div className="space-y-4">
+                  {selectedPlan.fullPlan.detailedActions.map((phase, i) => (
+                    <div key={i} className="bg-gray-50 p-4 rounded-lg">
+                      <p className="font-bold text-sm text-[#2800c8] mb-2">{phase.phase}</p>
+                      <ul className="list-disc list-inside text-sm text-gray-600 space-y-1">
+                        {phase.tasks.map((t, j) => <li key={j}>{t}</li>)}
+                      </ul>
                     </div>
+                  ))}
                 </div>
-            </motion.div>
+              </div>
+
+              <div className="flex gap-4 pt-4">
+                <button onClick={() => setIsModalOpen(false)} className="flex-1 py-3 rounded-xl border border-gray-200 font-bold text-gray-600 hover:bg-gray-50">
+                  Cerrar
+                </button>
+              </div>
+            </div>
+          </motion.div>
         </div>
       )}
     </div>

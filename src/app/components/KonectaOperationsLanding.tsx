@@ -21,8 +21,8 @@ interface StatDataPoint {
 
 interface FlippableStat {
   icon: React.ElementType
-  nov: StatDataPoint // Lado A (Noviembre)
-  dec: StatDataPoint // Lado B (Diciembre)
+  nov: StatDataPoint
+  dec: StatDataPoint
 }
 
 interface AgentProfile {
@@ -69,7 +69,7 @@ const KonectaOperationsLanding = () => {
     setFlippedCards(prev => ({...prev, [index]: !prev[index]}))
   }
 
-  // DATOS: NOVIEMBRE VS DICIEMBRE
+  // DATOS
   const flippableStats: FlippableStat[] = [
     { 
       icon: HeartHandshake, 
@@ -95,20 +95,16 @@ const KonectaOperationsLanding = () => {
 
   // AGENTES
   const agents: AgentProfile[] = [
-    // Q1 - The Stars
     { name: "Claudia Ardila", role: "The MVP", csat: "84%", prod: "9.79", quartile: "Q1", status: "active", badge: "👑" },
     { name: "Salomé Jaramillo", role: "Quality Queen", csat: "92%", prod: "6.68", quartile: "Q1", status: "active", badge: "🌟" },
     { name: "Sara Polo", role: "Consistency", csat: "85%", prod: "6.90", quartile: "Q1", status: "active" },
     { name: "Juan José Marin", role: "High Performer", csat: "83%", prod: "7.62", quartile: "Q1", status: "active" },
-    // Q2
     { name: "Rosa Tuberquia", role: "Solid Player", csat: "83%", prod: "7.06", quartile: "Q2", status: "active" },
     { name: "Jhony Morales", role: "Rising Star", csat: "75%", prod: "6.67", quartile: "Q2", status: "active" },
     { name: "Kelly Londoño", role: "Solid Player", csat: "70%", prod: "7.66", quartile: "Q2", status: "active" },
-    // Q3
     { name: "Natalia Vásquez", role: "Developing", csat: "67%", prod: "6.97", quartile: "Q3", status: "active" },
     { name: "Luisa Zapata", role: "Developing", csat: "64%", prod: "7.25", quartile: "Q3", status: "active" },
     { name: "Alva Blanquicett", role: "Developing", csat: "58%", prod: "7.10", quartile: "Q3", status: "active" },
-    // Q4
     { name: "Fabiana Ríos", role: "Statistical Victim", csat: "44%", prod: "8.69", quartile: "Q4", status: "risk", badge: "📉" },
     { name: "Valery Álvarez", role: "Needs Speed", csat: "87%", prod: "5.83", quartile: "Q4", status: "risk", badge: "🐢" },
     { name: "Juliana Cardona", role: "Game Over", csat: "44%", prod: "8.53", quartile: "Q4", status: "terminated", badge: "👋" },
@@ -285,10 +281,19 @@ La receta: Capacitación, Látigo con cariño (metas diarias) y sacar las manzan
         }
       `}</style>
 
-      {/* --- HERO SECTION --- */}
+      {/* --- HERO SECTION MODIFICADO --- */}
       <section className="relative h-[80vh] flex items-center justify-center overflow-hidden konecta-gradient">
-        <div className="absolute inset-0 opacity-10">
-           <Image src={MangoBlanco} alt="Logo Background" layout="fill" objectFit="contain" className="opacity-20 transform scale-150" />
+        {/* IMAGEN DE FONDO AJUSTADA */}
+        <div className="absolute inset-0 z-0 flex items-center justify-center pointer-events-none">
+           <div className="relative w-full h-full max-w-5xl opacity-30 p-20">
+              <Image 
+                src={MangoBlanco} 
+                alt="Logo Background" 
+                layout="fill" 
+                objectFit="contain" 
+                priority
+              />
+           </div>
         </div>
         
         <motion.div style={{ y: y1 }} className="relative z-10 text-center text-white px-4">

@@ -338,11 +338,13 @@ La receta: Capacitación, Látigo con cariño (metas diarias) y sacar las manzan
                  <RotateCw size={16}/> ¡Dale click a las tarjetas para ver la evolución! 🍋
              </span>
           </motion.div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 h-[280px]">
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {flippableStats.map((stat, idx) => {
               const isFlipped = flippedCards[idx] || false;
               return (
-                <div key={idx} className="perspective-1000 h-full cursor-pointer group" onClick={() => toggleFlip(idx)}>
+                // CORRECCIÓN AQUÍ: Ponemos la altura fija (h-72) en CADA tarjeta individual
+                <div key={idx} className="perspective-1000 h-72 cursor-pointer group" onClick={() => toggleFlip(idx)}>
                   <motion.div
                     className="relative w-full h-full transform-style-3d transition-transform duration-700"
                     animate={{ rotateY: isFlipped ? 180 : 0 }}

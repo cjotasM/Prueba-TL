@@ -21,9 +21,9 @@ interface StatDataPoint {
 }
 
 interface FlippableStat {
-  icon: React.ElementType
-  prev: StatDataPoint
-  curr: StatDataPoint
+  icon: React.ElementType; // O React.ComponentType
+  prev: StatDataPoint;
+  curr: StatDataPoint;
 }
 
 interface AgentProfile {

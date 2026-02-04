@@ -8,7 +8,6 @@ import {
   Award, Zap, BrainCircuit, HeartHandshake, UserX, RotateCw, Calculator, Scale, SearchCheck, LucideIcon
 } from 'lucide-react'
 import Image from 'next/image'
-// Asegúrate de que estas rutas sean correctas en tu proyecto
 import MangoBlanco from '../../img/MangoBlanco.png'
 import LogoKonectaBlanco from '../../img/Konecta_Logo_RGB_White.png'
 
@@ -71,7 +70,7 @@ const KonectaOperationsLanding = () => {
   }
 
   // DATOS REALES: DICIEMBRE VS ENERO
-  const flippableStats: FlippableStat[] = [
+  const flippableStats = [
     { 
       icon: HeartHandshake, 
       prev: { number: "73.1%", label: "CSAT Diciembre", subLabel: "Bajo la meta", status: "critical" },
@@ -94,7 +93,7 @@ const KonectaOperationsLanding = () => {
     }
   ] as FlippableStat[];
 
-  [cite_start]// AGENTES CON RESULTADOS DE ENERO [cite: 5, 6]
+  // AGENTES CON RESULTADOS DE ENERO
   const agents: AgentProfile[] = [
     { name: "Ferney Rolando", role: "CSAT Leader", csat: "85.9%", qa: "98.0%", prod: "7.22", quartile: "Q1", status: "active", badge: "🥇" },
     { name: "Jean Corona", role: "Standard Bearer", csat: "76.3%", qa: "95.1%", prod: "8.28", quartile: "Q1", status: "active", badge: "💎" },
@@ -226,7 +225,7 @@ La excelencia operativa no es un acto, es el hábito de medir lo que importa y a
     }
   }
 
-  const StatCardFace = ({ data, icon: Icon, isBack = false }: { data: StatDataPoint, icon: React.ElementType, isBack?: boolean }) => (
+  const StatCardFace = ({ data, icon: Icon, isBack = false }: { data: StatDataPoint, icon: LucideIcon, isBack?: boolean }) => (
     <div className={`absolute inset-0 h-full w-full rounded-2xl p-6 flex flex-col justify-between shadow-xl border-t-4 ${getStatusColor(data.status)} ${isBack ? 'bg-white' : 'bg-gray-50'}`}
          style={{ backfaceVisibility: 'hidden', transform: isBack ? 'rotateY(180deg)' : 'rotateY(0deg)' }}>
       <div>

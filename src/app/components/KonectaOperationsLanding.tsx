@@ -5,7 +5,7 @@ import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion'
 import { 
   ChevronDown, Users, Target, TrendingUp, Clock, 
   ArrowRight, AlertTriangle, CheckCircle, 
-  Award, Zap, BrainCircuit, HeartHandshake, UserX, RotateCw, Calculator, Scale, SearchCheck
+  Award, Zap, BrainCircuit, HeartHandshake, UserX, RotateCw, Calculator, Scale, SearchCheck, LucideIcon
 } from 'lucide-react'
 import Image from 'next/image'
 // Asegúrate de que estas rutas sean correctas en tu proyecto
@@ -21,7 +21,7 @@ interface StatDataPoint {
 }
 
 interface FlippableStat {
-  icon: React.ElementType; // O React.ComponentType
+  icon: LucideIcon;
   prev: StatDataPoint;
   curr: StatDataPoint;
 }
@@ -92,7 +92,7 @@ const KonectaOperationsLanding = () => {
       prev: { number: "26 HC", label: "Equipo inicial", subLabel: "Pre-ajuste operativo", status: "neutral" },
       curr: { number: "9 Agentes", label: "Limonada de Mango", subLabel: "Elite Home Office", status: "excellent" }
     }
-  ]
+  ] as FlippableStat[];
 
   [cite_start]// AGENTES CON RESULTADOS DE ENERO [cite: 5, 6]
   const agents: AgentProfile[] = [

@@ -5,9 +5,10 @@ import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion'
 import { 
   ChevronDown, Users, Target, TrendingUp, Clock, 
   ArrowRight, AlertTriangle, CheckCircle, 
-  Award, Zap, BrainCircuit, HeartHandshake, UserX, RotateCw, Calculator, Scale
+  Award, Zap, BrainCircuit, HeartHandshake, UserX, RotateCw, Calculator, Scale, SearchCheck
 } from 'lucide-react'
 import Image from 'next/image'
+// Asegúrate de que estas rutas sean correctas en tu proyecto
 import MangoBlanco from '../../img/MangoBlanco.png'
 import LogoKonectaBlanco from '../../img/Konecta_Logo_RGB_White.png'
 
@@ -21,17 +22,18 @@ interface StatDataPoint {
 
 interface FlippableStat {
   icon: React.ElementType
-  nov: StatDataPoint
-  dec: StatDataPoint
+  prev: StatDataPoint
+  curr: StatDataPoint
 }
 
 interface AgentProfile {
   name: string
   role: string
   csat: string
+  qa: string
   prod: string
   quartile: 'Q1' | 'Q2' | 'Q3' | 'Q4'
-  status: 'active' | 'risk' | 'terminated'
+  status: 'active' | 'risk'
   badge?: string
 }
 
@@ -56,7 +58,6 @@ interface ActionPlan {
   }
 }
 
-// --- DATA & CONFIG ---
 const KonectaOperationsLanding = () => {
   const [selectedPlan, setSelectedPlan] = useState<ActionPlan | null>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -69,110 +70,139 @@ const KonectaOperationsLanding = () => {
     setFlippedCards(prev => ({...prev, [index]: !prev[index]}))
   }
 
-  // DATOS: NOVIEMBRE VS DICIEMBRE
+  // DATOS REALES: DICIEMBRE VS ENERO
   const flippableStats: FlippableStat[] = [
     { 
       icon: HeartHandshake, 
-      nov: { number: "67.7%", label: "CSAT Noviembre", subLabel: "Estábamos fríos 🥶", status: "critical" },
-      dec: { number: "77.9%", label: "CSAT Diciembre", subLabel: "¡Meta Superada! 🍋🔥", status: "excellent" }
+      prev: { number: "73.1%", label: "CSAT Diciembre", subLabel: "Bajo la meta", status: "critical" },
+      curr: { number: "78.7%", label: "CSAT Enero", subLabel: "¡Recuperación lograda! 📈", status: "excellent" }
+    },
+    { 
+      icon: SearchCheck, 
+      prev: { number: "91.4%", label: "QA Diciembre", subLabel: "Gap de procesos", status: "warning" },
+      curr: { number: "86.2%", label: "QA Enero", subLabel: "Brecha crítica vs 95% 🚩", status: "critical" }
     },
     { 
       icon: Zap, 
-      nov: { number: "6.19", label: "Prod. Noviembre", subLabel: "Modo tortuga", status: "critical" },
-      // AQUÍ ESTÁ EL CAMBIO SOLICITADO
-      dec: { number: "7.39", label: "Prod. Diciembre", subLabel: "¡Equivale a ganar 1 agente extra! 🤖", status: "warning" }
+      prev: { number: "7.47", label: "Prod. Diciembre", subLabel: "Meta 7.5", status: "neutral" },
+      curr: { number: "7.14", label: "Prod. Enero", subLabel: "Alineado al nuevo Forecast", status: "target" }
     },
     { 
-      icon: Clock, 
-      nov: { number: "90.8%", label: "Adh. Noviembre", subLabel: "Sillas vacías", status: "warning" },
-      dec: { number: "94.9%", label: "Adh. Diciembre", subLabel: "Equipo comprometido", status: "excellent" }
-    },
-    { 
-      icon: UserX, 
-      nov: { number: "13 HC", label: "Headcount Nov", subLabel: "Equipo completo (con riesgos)", status: "neutral" },
-      dec: { number: "1 Baja", label: "Saneamiento Dic", subLabel: "Adiós a las malas prácticas", status: "target" }
+      icon: Users, 
+      prev: { number: "26 HC", label: "Equipo inicial", subLabel: "Pre-ajuste operativo", status: "neutral" },
+      curr: { number: "9 Agentes", label: "Limonada de Mango", subLabel: "Elite Home Office", status: "excellent" }
     }
   ]
 
-  // AGENTES
+  [cite_start]// AGENTES CON RESULTADOS DE ENERO [cite: 5, 6]
   const agents: AgentProfile[] = [
-    { name: "Claudia Ardila", role: "The MVP", csat: "84%", prod: "9.79", quartile: "Q1", status: "active", badge: "👑" },
-    { name: "Salomé Jaramillo", role: "Quality Queen", csat: "92%", prod: "6.68", quartile: "Q1", status: "active", badge: "🌟" },
-    { name: "Sara Polo", role: "Consistency", csat: "85%", prod: "6.90", quartile: "Q1", status: "active" },
-    { name: "Juan José Marin", role: "High Performer", csat: "83%", prod: "7.62", quartile: "Q1", status: "active" },
-    { name: "Rosa Tuberquia", role: "Solid Player", csat: "83%", prod: "7.06", quartile: "Q2", status: "active" },
-    { name: "Jhony Morales", role: "Rising Star", csat: "75%", prod: "6.67", quartile: "Q2", status: "active" },
-    { name: "Kelly Londoño", role: "Solid Player", csat: "70%", prod: "7.66", quartile: "Q2", status: "active" },
-    { name: "Natalia Vásquez", role: "Developing", csat: "67%", prod: "6.97", quartile: "Q3", status: "active" },
-    { name: "Luisa Zapata", role: "Developing", csat: "64%", prod: "7.25", quartile: "Q3", status: "active" },
-    { name: "Alva Blanquicett", role: "Developing", csat: "58%", prod: "7.10", quartile: "Q3", status: "active" },
-    { name: "Fabiana Ríos", role: "Statistical Victim", csat: "44%", prod: "8.69", quartile: "Q4", status: "risk", badge: "📉" },
-    { name: "Valery Álvarez", role: "Needs Speed", csat: "87%", prod: "5.83", quartile: "Q4", status: "risk", badge: "🐢" },
-    { name: "Juliana Cardona", role: "Game Over", csat: "44%", prod: "8.53", quartile: "Q4", status: "terminated", badge: "👋" },
+    { name: "Ferney Rolando", role: "CSAT Leader", csat: "85.9%", qa: "98.0%", prod: "7.22", quartile: "Q1", status: "active", badge: "🥇" },
+    { name: "Jean Corona", role: "Standard Bearer", csat: "76.3%", qa: "95.1%", prod: "8.28", quartile: "Q1", status: "active", badge: "💎" },
+    { name: "Kelly Londoño", role: "Solid Performer", csat: "76.5%", qa: "94.1%", prod: "7.82", quartile: "Q1", status: "active" },
+    { name: "Mariana Pérez", role: "Quality Queen", csat: "72.4%", qa: "100%", prod: "5.47", quartile: "Q2", status: "active", badge: "🌟" },
+    { name: "Valeria Piedrahita", role: "Most Improved", csat: "84.2%", qa: "86.2%", prod: "6.88", quartile: "Q2", status: "active" },
+    { name: "Valery Tamayo", role: "Empathy Expert", csat: "85.1%", qa: "89.4%", prod: "6.01", quartile: "Q2", status: "active" },
+    { name: "Rosa Angélica", role: "In Development", csat: "78.5%", qa: "78.4%", prod: "7.50", quartile: "Q3", status: "active", badge: "🛠️" },
+    { name: "Katriza Guerrero", role: "In Development", csat: "76.8%", qa: "78.0%", prod: "7.66", quartile: "Q3", status: "active", badge: "🛠️" },
+    { name: "Manuela Martínez", role: "Critical Focus", csat: "72.7%", qa: "74.5%", prod: "7.44", quartile: "Q4", status: "risk", badge: "⚠️" },
   ]
 
   const actionPlans: ActionPlan[] = [
     {
-      title: "Operación: Cázame esa Encuesta",
-      urgency: "PRIORIDAD PARA FABIANA",
-      description: "Fabiana tiene buen trato pero mala suerte estadística (solo 16 encuestas). Necesitamos volumen para diluir a los detractores.",
-      actions: ["Script de cierre obligatorio", "Meta: 40 encuestas/mes", "Monitoreo de cierre"],
-      color: "from-blue-600 to-cyan-500",
+      title: "Misión: Calidad 95%",
+      urgency: "CRÍTICO PARA MANUELA/KATRIZA",
+      description: "Cierre de brechas técnicas en procesos de Return/Exchange y Tipificación. El 95% no es negociable para febrero.",
+      actions: ["Clínicas de Feedback Individual", "Taller de Devoluciones", "Firma de Compromiso Digital"],
+      color: "from-red-600 to-orange-500",
       icon: Target,
       fullPlan: {
-        situation: "Fabiana Ríos cerró con 44% CSAT. Análisis muestra que es un 'Falso Negativo' causado por bajo volumen muestral (16 encuestas vs 93 de Claudia).",
-        impact: "Afecta el promedio del equipo injustamente dado que su productividad es Top 3.",
-        rootCause: "Falta de invitación explícita a la encuesta al final de la interacción.",
+        situation: "Manuela (74.5%) y Katriza (78.0%) presentan errores procedimentales críticos en flujos de devolución y seguridad.",
+        impact: "Pone en riesgo la certificación COPC y la integridad de la data operativa.",
+        rootCause: "Desconocimiento técnico de actualizaciones en el proceso de Return/Exchange.",
         detailedActions: [
-          { phase: "Semana 1: Implementación", tasks: ["Diseño de frase de cierre personalizada", "Roleplay de cierre", "Configuración de alerta de volumen"] },
-          { phase: "Semana 2-4: Ejecución", tasks: ["Tracking diario de volumen", "Celebración de cada promotor", "Ajuste de script si no hay respuesta"] }
+          { phase: "Semana 1: Shock", tasks: ["Feedback 1:1 con TL", "Auditoría en vivo de pantalla compartida", "Firma de plan de mejora"] },
+          { phase: "Semana 2: Refuerzo", tasks: ["Clínica de procesos con Formación", "Roleplay de casos complejos"] }
         ],
-        resources: "Scripting, Feedback 1:1, Tablero de Control",
-        timeline: "Enero Completo",
-        success_metrics: ">40 Encuestas procesadas, CSAT > 75%"
+        resources: "Formación Técnica, Monitoreo Remoto",
+        timeline: "Febrero (Ciclo Completo)",
+        success_metrics: "QA > 95% en los 8 monitoreos del mes"
       }
     },
     {
-      title: "Proyecto: Clonando a Claudia",
-      urgency: "NIVELACIÓN OPERATIVA",
-      description: "Valery y Jhony tienen calidad pero les falta nitro. Harán Shadowing Inverso con Claudia (la más rápida) para copiar sus trucos.",
-      actions: ["Sesiones de Shadowing", "Copia de atajos de teclado", "Drill de navegación"],
+      title: "Target: Eficiencia 7.0",
+      urgency: "MEJORA DE PRODUCTIVIDAD",
+      description: "Mariana P. y Valery T. lideran en calidad pero su productividad está por debajo del nuevo forecast de 7.0.",
+      actions: ["Análisis de Adherencia (ADH)", "Flash Coaching de Navegación", "Shadowing con Jean Corona"],
+      color: "from-blue-600 to-cyan-500",
+      icon: Zap,
+      fullPlan: {
+        situation: "Mariana P. tiene 100% de calidad pero solo 5.47 de productividad. Valery T. está en 6.01.",
+        impact: "Desbalance en la carga de trabajo del equipo ante volumen fluctuante.",
+        rootCause: "Tiempos extendidos en documentación y falta de agilidad en herramientas de consulta.",
+        detailedActions: [
+          { phase: "Semana 1: Análisis", tasks: ["Revisión de AHT vs Adherencia", "Identificación de 'Cuellos de Botella'"] },
+          { phase: "Semana 2: Agilidad", tasks: ["Implementación de atajos de teclado", "Optimización de macros de respuesta"] }
+        ],
+        resources: "Histórico de WFM, Sesiones de Mentoría",
+        timeline: "Quincena 1 Febrero",
+        success_metrics: "Productividad > 7.0 eventos/hora"
+      }
+    },
+    {
+      title: "Estándar COPC: 4+4",
+      urgency: "RIGOR OPERATIVO",
+      description: "Aseguramiento de muestra representativa para todo el equipo Limonada de Mango.",
+      actions: ["4 Monitoreos QA", "4 Monitoreos TL", "Calibración Semanal"],
       color: "from-purple-600 to-pink-600",
-      icon: BrainCircuit,
+      icon: Scale,
       fullPlan: {
-        situation: "Valery (Prod 5.83) y Jhony (6.67) están por debajo de la meta de 7.5, generando presión sobre el resto.",
-        impact: "Ineficiencia operativa y riesgo de acumulación de cola (Backlog).",
-        rootCause: "Flujos de navegación lentos y falta de uso de herramientas rápidas (atajos/macros).",
+        situation: "Necesitamos garantizar 8 evaluaciones por agente para tener validez estadística según COPC.",
+        impact: "Feedback más preciso y detección temprana de desviaciones.",
+        rootCause: "Cierre de enero con muestras incompletas en algunos perfiles (7 evaluaciones).",
         detailedActions: [
-          { phase: "Observación", tasks: ["Ver trabajar a Claudia Ardila 1 hora/día", "Anotar diferencias de proceso"] },
-          { phase: "Práctica", tasks: ["Implementar atajos de Claudia", "Roleplay de velocidad"] }
+          { phase: "Ejecución Semanal", tasks: ["2 monitoreos por semana (1 TL / 1 QA)", "Feedback en menos de 24h"] },
+          { phase: "Calibración", tasks: ["Mesa de unificación de criterios TL vs QA"] }
         ],
-        resources: "Claudia Ardila (Mentor), Tiempo fuera de línea",
-        timeline: "Quincena 1 Enero",
-        success_metrics: "Productividad > 7.5 eventos/hora"
-      }
-    },
-    {
-      title: "Iniciativa: Viernes de Escape",
-      urgency: "MOTIVACIÓN PURA",
-      description: "El incentivo 'El 80/8'. Si logras CSAT >80% y Prod >8.0 en la semana, te vas 2 horas antes el viernes.",
-      actions: ["Tracking semanal público", "Gestión de permisos WFM", "Celebración pública"],
-      color: "from-yellow-500 to-orange-500",
-      icon: Award,
-      fullPlan: {
-        situation: "Necesitamos mantener el momentum de Diciembre y evitar la fatiga post-navidad.",
-        impact: "Mejora clima laboral y crea competencia sana.",
-        rootCause: "N/A - Iniciativa proactiva de retención.",
-        detailedActions: [
-          { phase: "Lanzamiento", tasks: ["Comunicar reglas claras", "Crear tablero de posiciones"] },
-          { phase: "Premiación", tasks: ["Validación de métricas Jueves PM", "Autorización de salida Viernes"] }
-        ],
-        resources: "Horas de compensatorio, Budget de operación",
-        timeline: "Todo Enero",
-        success_metrics: "30% del equipo logrando la doble meta"
+        resources: "Plataforma de QA, Agenda de TL",
+        timeline: "Permanente",
+        success_metrics: "100% de cumplimiento en muestra (8/8)"
       }
     }
   ]
+
+  const downloadReport = () => {
+    const reportText = `
+🍋 MBR: TEAM LIMONADA DE MANGO 🥭
+Plan de Acción Febrero 2026 | TL Medellín (Home Office)
+
+1. ESTADO DE MÉTRICAS (Enero)
+- CSAT: 78.7% ✅ (Meta 75%)
+- QA: 86.2% 🔴 (Meta 95%)
+- Productividad: 7.14 ✅ (Meta 7.0)
+
+2. FOCOS DE INTERVENCIÓN (QA 95%)
+- Manuela Martínez (74.5%): Crítico en procesos de Devolución.
+- Katriza Guerrero (78.0%): Refuerzo en cierre de resolución.
+- Rosa Angélica (78.4%): Disciplina en CRM y protocolos.
+
+3. ESTRATEGIA OPERATIVA FEBRERO
+- Implementación de modelo de monitoreo 4+4 (TL + QA).
+- Clínica de procesos virtual con Formación (Semana 2).
+- Seguimiento de productividad para Mariana P. y Valery T.
+
+4. COMPROMISO
+La excelencia operativa no es un acto, es el hábito de medir lo que importa y actuar sobre lo que se mide.
+
+© 2026 Limonada de Mango Operations.
+    `
+    const element = document.createElement('a')
+    const file = new Blob([reportText], {type: 'text/plain;charset=utf-8'})
+    element.href = URL.createObjectURL(file)
+    element.download = `MBR_Febrero_Limonada_Mango.txt`
+    document.body.appendChild(element)
+    element.click()
+    document.body.removeChild(element)
+  }
 
   // --- HELPER FUNCTIONS ---
   const getStatusColor = (status: string) => {
@@ -196,47 +226,6 @@ const KonectaOperationsLanding = () => {
     }
   }
 
-  const downloadReport = () => {
-    const reportText = `
-🍋 MBR: TEAM LIMONADA DE MANGO 🥭
-Edición: Sobrevivientes de Diciembre | TL: Marlon Martinez
-
-1. ¿CÓMO NOS FUE? (Resumen)
-Señores, ¡habemus recuperación! Superamos la meta de CSAT (+10.2%) y casi le pegamos a la Productividad.
-La receta: Capacitación, Látigo con cariño (metas diarias) y sacar las manzanas podridas.
-
-2. SCORECARD (COMPARATIVO)
-- CSAT: Nov 67.7% -> Dic 77.9% ✅
-- Prod: Nov 6.19 -> Dic 7.39 (¡Subir 1.2 es como ganar 1 agente gratis! 🤖)
-- Adherencia: Nov 90.8% -> Dic 94.9% ✅
-
-3. JUSTIFICANDO MI SUELDO (ROI Coaching)
-- Clínica Grupal (18/Dic): 6.5 Horas-Hombre. Resultado: Clientes felices en Navidad.
-- 1-on-1 & Confesionario: ~5.2 Horas. Resultado: Corrección de rumbo inmediata.
-- Total Inversión: ~12 Horas de liderazgo puro.
-
-4. EL SALÓN DE LA FAMA
-- MVP: Claudia Ardila (Rápida y Furiosa: 9.79 Prod / 84% CSAT).
-- Calidad: Salomé Jaramillo (92% CSAT).
-- La Baja: Juliana Cardona (Renunció el 31/12). Adiós al Call Avoidance.
-
-5. PLAN ENERO
-- Survey Hunting para Fabiana.
-- Shadowing inverso para los lentos.
-- Cero tolerancia al corte de llamadas.
-
-© 2026 Limonada de Mango Ops.
-    `
-    const element = document.createElement('a')
-    const file = new Blob([reportText], {type: 'text/plain;charset=utf-8'})
-    element.href = URL.createObjectURL(file)
-    element.download = `MBR_Limonada_Mango_Dic2025.txt`
-    document.body.appendChild(element)
-    element.click()
-    document.body.removeChild(element)
-  }
-
-  // Componente interno para las caras de la tarjeta
   const StatCardFace = ({ data, icon: Icon, isBack = false }: { data: StatDataPoint, icon: React.ElementType, isBack?: boolean }) => (
     <div className={`absolute inset-0 h-full w-full rounded-2xl p-6 flex flex-col justify-between shadow-xl border-t-4 ${getStatusColor(data.status)} ${isBack ? 'bg-white' : 'bg-gray-50'}`}
          style={{ backfaceVisibility: 'hidden', transform: isBack ? 'rotateY(180deg)' : 'rotateY(0deg)' }}>
@@ -246,7 +235,7 @@ La receta: Capacitación, Látigo con cariño (metas diarias) y sacar las manzan
             <Icon size={24} />
           </div>
           <span className={`text-xs font-bold px-2 py-1 rounded-full flex items-center gap-1 ${getStatusColor(data.status).replace('border-', '')}`}>
-            {isBack ? 'DICIEMBRE 🍋' : 'NOVIEMBRE ❄️'}
+            {isBack ? 'ENERO 🍋' : 'DICIEMBRE ❄️'}
           </span>
         </div>
         <h3 className="text-4xl font-black text-gray-900 mb-1">{data.number}</h3>
@@ -256,7 +245,7 @@ La receta: Capacitación, Látigo con cariño (metas diarias) y sacar las manzan
         <p className="text-sm text-gray-500 italic">{data.subLabel}</p>
         {!isBack && (
             <div className="mt-4 flex items-center justify-center text-xs text-blue-600 font-bold gap-1 animate-pulse">
-                <RotateCw size={14}/> Click para ver el milagro
+                <RotateCw size={14}/> Click para ver evolución
             </div>
         )}
       </div>
@@ -274,36 +263,24 @@ La receta: Capacitación, Látigo con cariño (metas diarias) y sacar las manzan
         .konecta-gradient {
           background: linear-gradient(135deg, var(--konecta-primary), var(--konecta-secondary));
         }
-        .perspective-1000 {
-            perspective: 1000px;
-        }
-        .transform-style-3d {
-            transform-style: preserve-3d;
-        }
+        .perspective-1000 { perspective: 1000px; }
+        .transform-style-3d { transform-style: preserve-3d; }
       `}</style>
 
-      {/* --- HERO SECTION MODIFICADO --- */}
+      {/* --- HERO SECTION --- */}
       <section className="relative h-[80vh] flex items-center justify-center overflow-hidden konecta-gradient">
         <div className="absolute inset-0 z-0 flex items-center justify-center pointer-events-none">
            <div className="relative w-full h-full max-w-5xl opacity-30 p-20">
-              <Image 
-                src={MangoBlanco} 
-                alt="Logo Background" 
-                layout="fill" 
-                objectFit="contain" 
-                priority
-              />
+              <Image src={MangoBlanco} alt="Logo" layout="fill" objectFit="contain" priority />
            </div>
         </div>
         
         <motion.div style={{ y: y1 }} className="relative z-10 text-center text-white px-4">
           <motion.div 
-            initial={{ scale: 0.8, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ duration: 0.5 }}
+            initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
             className="mb-4 inline-block px-4 py-1 rounded-full bg-yellow-400 text-blue-900 font-bold tracking-wider"
           >
-            MONTHLY BUSINESS REVIEW
+            MONTHLY BUSINESS REVIEW - FEBRERO
           </motion.div>
           <h1 className="text-6xl md:text-8xl font-black mb-4 tracking-tight">
             LIMONADA <br/>
@@ -312,46 +289,33 @@ La receta: Capacitación, Látigo con cariño (metas diarias) y sacar las manzan
             </span>
           </h1>
           <p className="text-xl md:text-2xl text-blue-100 max-w-2xl mx-auto font-light">
-            Edición: &quot;Sobrevivientes de Diciembre&quot;
+            Estrategia de Excelencia Operativa: Misión 95%
           </p>
           <div className="mt-8 flex gap-4 justify-center">
              <button onClick={() => document.getElementById('stats')?.scrollIntoView({behavior:'smooth'})} className="bg-white text-blue-900 px-8 py-3 rounded-full font-bold hover:bg-yellow-300 transition-colors shadow-lg flex items-center gap-2">
-                Ver Resultados <ChevronDown size={20}/>
+                Resultados JAN <ChevronDown size={20}/>
              </button>
              <button onClick={downloadReport} className="border-2 border-white text-white px-8 py-3 rounded-full font-bold hover:bg-white/10 transition-colors">
-                Descargar TXT
+                Descargar Plan TXT
              </button>
           </div>
         </motion.div>
       </section>
 
-      {/* --- KPI STATS (FLIP CARDS) --- */}
+      {/* --- KPI STATS --- */}
       <section id="stats" className="py-20 -mt-20 relative z-20 px-4">
         <div className="max-w-7xl mx-auto">
-          <motion.div 
-             initial={{ opacity: 0, y: 20 }}
-             whileInView={{ opacity: 1, y: 0 }}
-             viewport={{ once: true }}
-             className="text-center mb-8"
-          >
-             <span className="bg-white px-4 py-2 rounded-full text-blue-900 font-bold shadow-md flex items-center justify-center gap-2 mx-auto w-fit">
-                 <RotateCw size={16}/> ¡Dale click a las tarjetas para ver la evolución! 🍋
-             </span>
-          </motion.div>
-          
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {flippableStats.map((stat, idx) => {
               const isFlipped = flippedCards[idx] || false;
               return (
-                // CORRECCIÓN AQUÍ: Ponemos la altura fija (h-72) en CADA tarjeta individual
-                <div key={idx} className="perspective-1000 h-72 cursor-pointer group" onClick={() => toggleFlip(idx)}>
+                <div key={idx} className="perspective-1000 h-72 cursor-pointer" onClick={() => toggleFlip(idx)}>
                   <motion.div
                     className="relative w-full h-full transform-style-3d transition-transform duration-700"
                     animate={{ rotateY: isFlipped ? 180 : 0 }}
-                    transition={{ type: "spring", stiffness: 260, damping: 20 }}
                   >
-                    <StatCardFace data={stat.nov} icon={stat.icon} />
-                    <StatCardFace data={stat.dec} icon={stat.icon} isBack={true} />
+                    <StatCardFace data={stat.prev} icon={stat.icon} />
+                    <StatCardFace data={stat.curr} icon={stat.icon} isBack={true} />
                   </motion.div>
                 </div>
               )
@@ -360,61 +324,15 @@ La receta: Capacitación, Látigo con cariño (metas diarias) y sacar las manzan
         </div>
       </section>
 
-      {/* --- SECTION: JUSTIFICANDO LA NÓMINA (ROI) --- */}
-      <section className="py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-4">
-          <motion.div 
-            initial={{ opacity: 0 }} 
-            whileInView={{ opacity: 1 }}
-            className="text-center mb-12"
-          >
-            <h2 className="text-4xl font-black text-[#2800c8] mb-4">JUSTIFICANDO MI SUELDO 💰</h2>
-            <p className="text-xl text-gray-600">ROI del Coaching: Invertimos tiempo, cosechamos calidad.</p>
-          </motion.div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {/* Card 1 */}
-            <div className="bg-blue-50 rounded-2xl p-8 border border-blue-100 relative overflow-hidden">
-                <div className="absolute top-0 right-0 p-4 opacity-10"><Users size={100} /></div>
-                <h3 className="text-2xl font-bold text-blue-900 mb-2">La Misa Grupal</h3>
-                <div className="text-4xl font-black text-blue-600 mb-4">6.5h</div>
-                <p className="text-blue-800 font-medium">Workshop &quot;Calidad Percibida&quot; (18/Dic)</p>
-                <p className="text-sm text-blue-600 mt-2">13 Agentes alineados antes de Navidad.</p>
-            </div>
-            {/* Card 2 */}
-            <div className="bg-purple-50 rounded-2xl p-8 border border-purple-100 relative overflow-hidden">
-                <div className="absolute top-0 right-0 p-4 opacity-10"><Zap size={100} /></div>
-                <h3 className="text-2xl font-bold text-purple-900 mb-2">Flash Coaching</h3>
-                <div className="text-4xl font-black text-purple-600 mb-4">~5.2h</div>
-                <p className="text-purple-800 font-medium">Sesiones 1-on-1</p>
-                <p className="text-sm text-purple-600 mt-2">Corrección de rumbo en tiempo real.</p>
-            </div>
-            {/* Card 3 */}
-            <div className="bg-green-50 rounded-2xl p-8 border border-green-100 relative overflow-hidden">
-                <div className="absolute top-0 right-0 p-4 opacity-10"><TrendingUp size={100} /></div>
-                <h3 className="text-2xl font-bold text-green-900 mb-2">Resultado Final</h3>
-                <div className="text-4xl font-black text-green-600 mb-4">+10.2%</div>
-                <p className="text-green-800 font-medium">Incremento en CSAT</p>
-                <p className="text-sm text-green-600 mt-2">El negocio redondo de Diciembre.</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* --- QUARTILES / AGENT TIERS --- */}
+      {/* --- AGENT SCORECARD --- */}
       <section className="py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4">
-          <h2 className="text-4xl font-black text-center text-[#2800c8] mb-12">EL SALÓN DE LA FAMA (Y LA NOVELA)</h2>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+          <h2 className="text-4xl font-black text-center text-[#2800c8] mb-12">SCORECARD: LIMONADA DE MANGO (JAN)</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
             {agents.map((agent, idx) => (
               <motion.div
                 key={idx}
-                initial={{ opacity: 0, scale: 0.9 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ delay: idx * 0.05 }}
-                className={`relative p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow ${getQuartileStyle(agent.quartile)} ${agent.status === 'terminated' ? 'opacity-75 grayscale-[0.5]' : ''}`}
+                className={`relative p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow ${getQuartileStyle(agent.quartile)}`}
               >
                 <div className="flex justify-between items-start mb-4">
                   <div>
@@ -431,107 +349,48 @@ La receta: Capacitación, Látigo con cariño (metas diarias) y sacar las manzan
                   </span>
                 </div>
                 
-                <div className="grid grid-cols-2 gap-4 mt-4">
+                <div className="grid grid-cols-3 gap-2 mt-4">
                     <div className="text-center bg-white/50 p-2 rounded-lg">
-                        <div className="text-xs text-gray-500">CSAT</div>
-                        <div className={`font-black text-lg ${parseInt(agent.csat) > 80 ? 'text-green-600' : parseInt(agent.csat) < 70 ? 'text-red-500' : 'text-yellow-600'}`}>
-                            {agent.csat}
-                        </div>
+                        <div className="text-[10px] text-gray-500">CSAT</div>
+                        <div className="font-black text-sm text-green-600">{agent.csat}</div>
                     </div>
                     <div className="text-center bg-white/50 p-2 rounded-lg">
-                        <div className="text-xs text-gray-500">PROD</div>
-                        <div className="font-black text-lg text-blue-600">{agent.prod}</div>
+                        <div className="text-[10px] text-gray-500">QA</div>
+                        <div className={`font-black text-sm ${parseFloat(agent.qa) >= 95 ? 'text-blue-600' : 'text-red-500'}`}>{agent.qa}</div>
+                    </div>
+                    <div className="text-center bg-white/50 p-2 rounded-lg">
+                        <div className="text-[10px] text-gray-500">PROD</div>
+                        <div className="font-black text-sm text-gray-700">{agent.prod}</div>
                     </div>
                 </div>
-
-                {agent.status === 'terminated' && (
-                    <div className="absolute inset-0 flex items-center justify-center rounded-xl pointer-events-none">
-                        <span className="bg-red-600/90 text-white px-4 py-2 rounded-full font-bold transform -rotate-12 shadow-xl border-2 border-white z-10">
-                            BAJA / RENUNCIA
-                        </span>
-                    </div>
-                )}
               </motion.div>
             ))}
           </div>
-
-          {/* --- EXPLICACIÓN DE CÁLCULO --- */}
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            className="bg-white rounded-2xl p-8 border border-gray-200 shadow-sm max-w-4xl mx-auto"
-          >
-             <h3 className="text-2xl font-bold text-[#2800c8] mb-6 flex items-center gap-2">
-                <Calculator className="text-yellow-500"/> ¿Cómo rayos calculamos esto? (La Ciencia)
-             </h3>
-             <p className="text-gray-600 mb-6 text-lg">
-                No jugamos a los dados. Usamos una <strong>Matriz de Desempeño (9-Box simplificado)</strong> cruzando las dos variables que mueven este negocio:
-             </p>
-             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div className="space-y-4">
-                    <div className="flex items-start gap-3">
-                        <div className="bg-yellow-100 p-2 rounded-lg text-yellow-700 mt-1"><Award size={20}/></div>
-                        <div>
-                            <h4 className="font-bold text-gray-900">Q1: La Élite (Stars)</h4>
-                            <p className="text-sm text-gray-600">Alta Calidad (&gt;80%) + Alta Velocidad. Son el equilibrio perfecto.</p>
-                        </div>
-                    </div>
-                    <div className="flex items-start gap-3">
-                        <div className="bg-blue-100 p-2 rounded-lg text-blue-700 mt-1"><Users size={20}/></div>
-                        <div>
-                            <h4 className="font-bold text-gray-900">Q2: El Núcleo (Core)</h4>
-                            <p className="text-sm text-gray-600">Cumplen consistentemente. Son la columna vertebral de la operación.</p>
-                        </div>
-                    </div>
-                </div>
-                <div className="space-y-4">
-                    <div className="flex items-start gap-3">
-                        <div className="bg-orange-100 p-2 rounded-lg text-orange-700 mt-1"><Scale size={20}/></div>
-                        <div>
-                            <h4 className="font-bold text-gray-900">Q3: En Desarrollo</h4>
-                            <p className="text-sm text-gray-600">Falta pulir una de las dos variables (o muy lentos o calidad inestable).</p>
-                        </div>
-                    </div>
-                    <div className="flex items-start gap-3">
-                        <div className="bg-red-100 p-2 rounded-lg text-red-700 mt-1"><AlertTriangle size={20}/></div>
-                        <div>
-                            <h4 className="font-bold text-gray-900">Q4: Alerta Roja</h4>
-                            <p className="text-sm text-gray-600">Bajo CSAT (&lt;50%) o conductas de riesgo (Call Avoidance) aunque sean rápidos.</p>
-                        </div>
-                    </div>
-                </div>
-             </div>
-          </motion.div>
-
         </div>
       </section>
 
-      {/* --- PLAN DE ACCIÓN --- */}
+      {/* --- PLAN DE ACCIÓN FEBRERO --- */}
       <section id="action-plans" className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-black text-[#2800c8] mb-4">PLAN DE ATAQUE: ENERO 🥭</h2>
-            <p className="text-xl text-gray-600">Estrategias quirúrgicas para empezar el año ganando.</p>
+            <h2 className="text-4xl font-black text-[#2800c8] mb-4">PLAN DE ATAQUE: FEBRERO 🎯</h2>
+            <p className="text-xl text-gray-600">Acciones COPC para el cumplimiento del 95% de Calidad.</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {actionPlans.map((plan, idx) => (
               <motion.div
-                key={idx}
-                whileHover={{ y: -10 }}
+                key={idx} whileHover={{ y: -10 }}
                 className="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100 flex flex-col"
               >
                 <div className={`h-2 bg-gradient-to-r ${plan.color}`} />
                 <div className="p-8 flex-grow">
                   <div className="flex items-center gap-3 mb-4">
-                    <div className={`p-3 rounded-lg bg-gray-50 text-gray-700`}>
-                        <plan.icon size={24} />
-                    </div>
-                    <span className="text-xs font-bold text-red-500 bg-red-50 px-2 py-1 rounded-full">{plan.urgency}</span>
+                    <div className={`p-3 rounded-lg bg-gray-50 text-gray-700`}><plan.icon size={24} /></div>
+                    <span className="text-[10px] font-bold text-red-500 bg-red-50 px-2 py-1 rounded-full uppercase tracking-tighter">{plan.urgency}</span>
                   </div>
                   <h3 className="text-2xl font-bold text-gray-900 mb-3">{plan.title}</h3>
-                  <p className="text-gray-600 mb-6">{plan.description}</p>
-                  
+                  <p className="text-gray-600 mb-6 text-sm leading-relaxed">{plan.description}</p>
                   <div className="space-y-3">
                     {plan.actions.map((action, i) => (
                         <div key={i} className="flex items-center gap-2 text-sm text-gray-700">
@@ -546,7 +405,7 @@ La receta: Capacitación, Látigo con cariño (metas diarias) y sacar las manzan
                         onClick={() => { setSelectedPlan(plan); setIsModalOpen(true); }}
                         className="w-full py-2 text-[#2800c8] font-bold hover:text-blue-700 flex items-center justify-center gap-2"
                     >
-                        Ver Detalle Completo <ArrowRight size={16}/>
+                        Ver Detalle Operativo <ArrowRight size={16}/>
                     </button>
                 </div>
               </motion.div>
@@ -563,20 +422,21 @@ La receta: Capacitación, Látigo con cariño (metas diarias) y sacar las manzan
             </div>
             <p className="text-blue-200">
                 Reporte Generado por: <span className="text-yellow-400 font-bold">Marlon Martinez</span><br/>
-                Team Leader | Campaña Mango
+                Team Leader | Limonada de Mango
             </p>
-            <p className="text-xs text-blue-400 mt-8">© 2026 Confidential Operations Report</p>
+            <p className="text-sm italic text-blue-400 mt-6 font-light">
+              &quot;La excelencia operativa no es un acto, es el hábito de medir lo que importa y actuar sobre lo que se mide.&quot;
+            </p>
+            <p className="text-[10px] text-blue-500 mt-8">© 2026 Confidential Operations Report - COPC Standard</p>
         </div>
       </footer>
 
-      {/* --- MODAL --- */}
+      {/* --- MODAL (DETALLE DE PLAN) --- */}
       <AnimatePresence>
         {isModalOpen && selectedPlan && (
             <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
                 <motion.div 
-                    initial={{ opacity: 0, scale: 0.95, y: 20 }}
-                    animate={{ opacity: 1, scale: 1, y: 0 }}
-                    exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                    initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }}
                     className="bg-white rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto"
                 >
                     <div className={`p-6 bg-gradient-to-r ${selectedPlan.color} text-white sticky top-0 z-10`}>
@@ -588,7 +448,6 @@ La receta: Capacitación, Látigo con cariño (metas diarias) y sacar las manzan
                             <h4 className="font-bold text-gray-900 mb-2 flex items-center gap-2"><AlertTriangle size={18} className="text-red-500"/> Causa Raíz</h4>
                             <p className="text-gray-600 bg-red-50 p-4 rounded-lg border-l-4 border-red-500">{selectedPlan.fullPlan.rootCause}</p>
                         </div>
-                        
                         <div>
                             <h4 className="font-bold text-gray-900 mb-2 flex items-center gap-2"><Target size={18} className="text-blue-500"/> Acciones por Fase</h4>
                             <div className="space-y-4">
@@ -597,8 +456,8 @@ La receta: Capacitación, Látigo con cariño (metas diarias) y sacar las manzan
                                         <p className="font-bold text-sm text-[#2800c8] mb-2">{phase.phase}</p>
                                         <ul className="space-y-2">
                                             {phase.tasks.map((t, j) => (
-                                                <li key={j} className="flex items-start gap-2 text-sm text-gray-700">
-                                                    <CheckCircle size={16} className="text-green-500 mt-0.5 flex-shrink-0"/>
+                                                <li key={j} className="flex items-start gap-2 text-xs text-gray-700">
+                                                    <CheckCircle size={14} className="text-green-500 mt-0.5 flex-shrink-0"/>
                                                     <span>{t}</span>
                                                 </li>
                                             ))}
@@ -607,21 +466,13 @@ La receta: Capacitación, Látigo con cariño (metas diarias) y sacar las manzan
                                 ))}
                             </div>
                         </div>
-
-                        <div className="grid grid-cols-2 gap-4">
+                        <div className="grid grid-cols-2 gap-4 pt-4">
                             <div className="bg-purple-50 p-4 rounded-lg">
-                                <h4 className="font-bold text-purple-900 mb-1 text-sm">Recursos</h4>
-                                <p className="text-xs text-purple-700">{selectedPlan.fullPlan.resources}</p>
+                                <h4 className="font-bold text-purple-900 mb-1 text-sm text-center">Meta de Éxito</h4>
+                                <p className="text-xs text-purple-700 text-center">{selectedPlan.fullPlan.success_metrics}</p>
                             </div>
-                            <div className="bg-green-50 p-4 rounded-lg">
-                                <h4 className="font-bold text-green-900 mb-1 text-sm">Meta de Éxito</h4>
-                                <p className="text-xs text-green-700">{selectedPlan.fullPlan.success_metrics}</p>
-                            </div>
-                        </div>
-
-                        <div className="pt-4 border-t border-gray-100">
-                            <button onClick={() => setIsModalOpen(false)} className="w-full py-3 rounded-xl bg-gray-100 font-bold text-gray-700 hover:bg-gray-200 transition-colors">
-                                Cerrar Plan
+                            <button onClick={() => setIsModalOpen(false)} className="py-3 rounded-xl bg-gray-100 font-bold text-gray-700 hover:bg-gray-200 transition-colors">
+                                Cerrar
                             </button>
                         </div>
                     </div>
